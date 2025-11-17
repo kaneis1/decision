@@ -1,0 +1,24 @@
+>>> Iteration 1/10
+================================================================================
+Iteration 1
+time/training: 5130.778897762299
+time/total: 5135.745610237122
+time/evaluation: 0.0007102489471435547
+training/train_loss_mean: nan
+training/train_loss_std: nan
+training/action_error: nan
+>>> Iteration 2/10
+Traceback (most recent call last):
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd.py", line 483, in <module>
+    main(args)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd.py", line 456, in main
+    logs = trainer.train_iteration(num_steps=args.num_steps_per_iter, iter_num=itn, print_logs=True)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\training\trainer.py", line 30, in train_iteration
+    train_loss = self.train_step()
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\training\seq_trainer.py", line 10, in train_step
+    states, actions, rewards, dones, rtg, timesteps, attention_mask = self.get_batch(self.batch_size)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd.py", line 339, in get_batch
+    rtg_i = discount_cumsum(traj["rewards"][si:], gamma=1.0)[: s_i.shape[0] + 1]
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd.py", line 28, in discount_cumsum
+    out[t] = x[t] + gamma * out[t + 1]
+KeyboardInterrupt

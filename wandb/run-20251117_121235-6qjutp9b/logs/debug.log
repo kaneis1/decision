@@ -1,0 +1,58 @@
+2025-11-17 12:12:35,142 INFO    MainThread:48168 [wandb_setup.py:_flush():81] Current SDK version is 0.22.1
+2025-11-17 12:12:35,144 INFO    MainThread:48168 [wandb_setup.py:_flush():81] Configure stats pid to 48168
+2025-11-17 12:12:35,144 INFO    MainThread:48168 [wandb_setup.py:_flush():81] Loading settings from C:\Users\kanie\.config\wandb\settings
+2025-11-17 12:12:35,144 INFO    MainThread:48168 [wandb_setup.py:_flush():81] Loading settings from D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\settings
+2025-11-17 12:12:35,144 INFO    MainThread:48168 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2025-11-17 12:12:35,144 INFO    MainThread:48168 [wandb_init.py:setup_run_log_directory():705] Logging user logs to D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\run-20251117_121235-6qjutp9b\logs\debug.log
+2025-11-17 12:12:35,145 INFO    MainThread:48168 [wandb_init.py:setup_run_log_directory():706] Logging internal logs to D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\run-20251117_121235-6qjutp9b\logs\debug-internal.log
+2025-11-17 12:12:35,145 INFO    MainThread:48168 [wandb_init.py:init():832] calling init triggers
+2025-11-17 12:12:35,145 INFO    MainThread:48168 [wandb_init.py:init():837] wandb.init called with sweep_config: {}
+config: {'csv_path': 'data/all_data.csv', 'K': 40, 'batch_size': 32, 'embed_dim': 64, 'n_layer': 1, 'n_head': 1, 'activation_function': 'relu', 'dropout': 0.1, 'learning_rate': 0.0001, 'weight_decay': 0.0001, 'warmup_steps': 100, 'max_iters': 10, 'num_steps_per_iter': 10000, 'device': 'cuda', 'log_to_wandb': True, 'wandb_api_key': '', 'num_folds': 5, 'fold_index': 0, 'fold_seed': 0, 'run_all_folds': True, 'model_type': 'gpt2', 'history_k': 5, '_wandb': {}}
+2025-11-17 12:12:35,145 INFO    MainThread:48168 [wandb_init.py:init():880] starting backend
+2025-11-17 12:12:37,438 INFO    MainThread:48168 [wandb_init.py:init():883] sending inform_init request
+2025-11-17 12:12:37,493 INFO    MainThread:48168 [wandb_init.py:init():891] backend started and connected
+2025-11-17 12:12:37,497 INFO    MainThread:48168 [wandb_init.py:init():961] updated telemetry
+2025-11-17 12:12:37,562 INFO    MainThread:48168 [wandb_init.py:init():985] communicating run to backend with 90.0 second timeout
+2025-11-17 12:12:38,699 INFO    MainThread:48168 [wandb_init.py:init():1036] starting run threads in backend
+2025-11-17 12:12:38,859 INFO    MainThread:48168 [wandb_run.py:_console_start():2506] atexit reg
+2025-11-17 12:12:38,859 INFO    MainThread:48168 [wandb_run.py:_redirect():2354] redirect: wrap_raw
+2025-11-17 12:12:38,859 INFO    MainThread:48168 [wandb_run.py:_redirect():2423] Wrapping output streams.
+2025-11-17 12:12:38,861 INFO    MainThread:48168 [wandb_run.py:_redirect():2446] Redirects installed.
+2025-11-17 12:12:38,872 INFO    MainThread:48168 [wandb_init.py:init():1076] run started, returning control to user process
+2025-11-17 12:39:45,347 INFO    wandb-AsyncioManager-main:48168 [service_client.py:_forward_responses():80] Reached EOF.
+2025-11-17 12:39:45,361 INFO    wandb-AsyncioManager-main:48168 [mailbox.py:close():137] Closing mailbox, abandoning 1 handles.
+2025-11-17 12:39:47,824 ERROR   MainThread:48168 [redirect.py:_on_write():664] [all runs] error in stdout callback
+Traceback (most recent call last):
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\lib\redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\wandb_run.py", line 2427, in <lambda>
+    lambda data: self._console_raw_callback("stdout", data),
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\wandb_run.py", line 1595, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\interface\interface.py", line 802, in publish_output_raw
+    self._publish_output_raw(o)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\interface\interface_shared.py", line 37, in _publish_output_raw
+    self._publish(rec)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\interface\interface_sock.py", line 43, in _publish
+    self._asyncer.run(lambda: self._client.publish(request))
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\lib\asyncio_manager.py", line 136, in run
+    return future.result()
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\concurrent\futures\_base.py", line 458, in result
+    return self.__get_result()
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\concurrent\futures\_base.py", line 403, in __get_result
+    raise self._exception
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\lib\asyncio_manager.py", line 219, in _wrap
+    return await fn()
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\lib\service\service_client.py", line 38, in publish
+    await self._send_server_request(request)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\lib\service\service_client.py", line 64, in _send_server_request
+    await self._writer.drain()
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\asyncio\streams.py", line 371, in drain
+    await self._protocol._drain_helper()
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\asyncio\streams.py", line 167, in _drain_helper
+    raise ConnectionResetError('Connection lost')
+ConnectionResetError: Connection lost

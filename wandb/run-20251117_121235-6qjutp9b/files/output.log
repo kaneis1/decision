@@ -1,0 +1,136 @@
+>>> Fold 1 | Iteration 1/10
+================================================================================
+Iteration 1
+time/training: 107.06900668144226
+time/total: 111.3990683555603
+time/evaluation: 0.001508474349975586
+training/train_loss_mean: -296.72353103699834
+training/train_loss_std: 229.8100296500024
+training/action_accuracy: 0.59375
+Validation Accuracy: 0.558634
+>>> Fold 1 | Iteration 2/10
+================================================================================
+Iteration 2
+time/training: 96.04658389091492
+time/total: 291.7692782878876
+time/evaluation: 0.0
+training/train_loss_mean: -1468.0010138031005
+training/train_loss_std: 597.1294470278413
+training/action_accuracy: 0.625
+Validation Accuracy: 0.420181
+>>> Fold 1 | Iteration 3/10
+================================================================================
+Iteration 3
+time/training: 87.96722388267517
+time/total: 451.463627576828
+time/evaluation: 0.0
+training/train_loss_mean: -3521.9276001708986
+training/train_loss_std: 1135.244105520719
+training/action_accuracy: 0.5625
+Validation Accuracy: 0.418924
+>>> Fold 1 | Iteration 4/10
+================================================================================
+Iteration 4
+time/training: 92.02334189414978
+time/total: 617.5843987464905
+time/evaluation: 0.0009999275207519531
+training/train_loss_mean: -6419.258004437256
+training/train_loss_std: 1863.2772930140902
+training/action_accuracy: 0.65625
+Validation Accuracy: 0.400164
+>>> Fold 1 | Iteration 5/10
+================================================================================
+Iteration 5
+time/training: 86.26897406578064
+time/total: 773.4275975227356
+time/evaluation: 0.0
+training/train_loss_mean: -10236.273084625243
+training/train_loss_std: 2773.0695112747085
+training/action_accuracy: 0.75
+Validation Accuracy: 0.397534
+>>> Fold 1 | Iteration 6/10
+================================================================================
+Iteration 6
+time/training: 87.13810086250305
+time/total: 929.4929921627045
+time/evaluation: 0.0
+training/train_loss_mean: -14916.071878808594
+training/train_loss_std: 3914.282800377405
+training/action_accuracy: 0.6875
+Validation Accuracy: 0.563631
+>>> Fold 1 | Iteration 7/10
+================================================================================
+Iteration 7
+time/training: 87.0606701374054
+time/total: 1085.2812089920044
+time/evaluation: 0.0
+training/train_loss_mean: -20526.85749663086
+training/train_loss_std: 5353.461418051252
+training/action_accuracy: 0.4375
+Validation Accuracy: 0.397972
+>>> Fold 1 | Iteration 8/10
+================================================================================
+Iteration 8
+time/training: 87.02623271942139
+time/total: 1248.8884346485138
+time/evaluation: 0.0
+training/train_loss_mean: -26955.35223408203
+training/train_loss_std: 6946.70892464696
+training/action_accuracy: 0.5625
+Validation Accuracy: 0.508314
+>>> Fold 1 | Iteration 9/10
+================================================================================
+Iteration 9
+time/training: 87.38229727745056
+time/total: 1404.6587607860565
+time/evaluation: 0.0010004043579101562
+training/train_loss_mean: -34301.745485538864
+training/train_loss_std: 8667.812983785447
+training/action_accuracy: 0.53125
+Validation Accuracy: 0.425499
+>>> Fold 1 | Iteration 10/10
+================================================================================
+Iteration 10
+time/training: 86.9202573299408
+time/total: 1561.1943652629852
+time/evaluation: 0.0
+training/train_loss_mean: -42435.73891821289
+training/train_loss_std: 10672.694859537824
+training/action_accuracy: 0.53125
+Validation Accuracy: 0.508869
+
+======================================================================
+Evaluating IPD metrics for Fold 1/5
+======================================================================
+Traceback (most recent call last):
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 616, in <module>
+    main(args)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 580, in main
+    val_accuracy = train_single_fold(fold_idx, train_inds, val_inds)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 491, in train_single_fold
+    metrics = evaluate_ipd_metrics_and_betas(
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\evaluation\evaluate_ipd.py", line 163, in evaluate_ipd_metrics_and_betas
+    _, a_pred, _ = model.forward(
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\gpt2_bc.py", line 87, in forward
+    transformer_outputs = self.transformer(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 731, in forward
+    outputs = block(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 302, in forward
+    attn_outputs = self.attn(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 235, in forward
+    attn_outputs = self._attn(query, key, value, attention_mask, head_mask, output_attentions)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 170, in _attn
+    w = torch.where(mask.bool(), w, self.masked_bias.to(w.dtype))
+RuntimeError: The size of tensor a (5) must match the size of tensor b (40) at non-singleton dimension 3

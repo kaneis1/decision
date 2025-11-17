@@ -1,0 +1,107 @@
+_wandb:
+    value:
+        cli_version: 0.22.0
+        e:
+            5xhrzq2es9w7lxa28ps7hmn1nootgl7t:
+                args:
+                    - --log_to_wandb
+                    - --csv_path
+                    - data/all_data.csv
+                codePath: experiment_ipd_csv_rate.py
+                codePathLocal: experiment_ipd_csv_rate.py
+                cpu_count: 8
+                cpu_count_logical: 16
+                cudaVersion: "13.0"
+                disk:
+                    /:
+                        total: "649178730496"
+                        used: "506927673344"
+                email: kanielquits@gmail.com
+                executable: D:\Anaconda3\python.exe
+                gpu: NVIDIA GeForce RTX 5060 Laptop GPU
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Blackwell
+                      cudaCores: 3328
+                      memoryTotal: "8546942976"
+                      name: NVIDIA GeForce RTX 5060 Laptop GPU
+                      uuid: GPU-9861f1dc-6849-3886-ebd4-8667cf017a97
+                host: Kaneis
+                memory:
+                    total: "15885135872"
+                os: Windows-11-10.0.26100-SP0
+                program: D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd_csv_rate.py
+                python: CPython 3.13.5
+                root: D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd
+                startedAt: "2025-11-02T21:55:32.210638Z"
+                writerId: 5xhrzq2es9w7lxa28ps7hmn1nootgl7t
+        m: []
+        python_version: 3.13.5
+        t:
+            "1":
+                - 1
+                - 11
+                - 41
+                - 49
+                - 71
+            "2":
+                - 1
+                - 11
+                - 41
+                - 49
+                - 71
+            "3":
+                - 16
+            "4": 3.13.5
+            "5": 0.22.0
+            "6": 4.56.2
+            "8":
+                - 3
+            "12": 0.22.0
+            "13": windows-amd64
+K:
+    value: 30
+activation_function:
+    value: relu
+batch_size:
+    value: 128
+csv_path:
+    value: data/all_data.csv
+device:
+    value: cuda
+dropout:
+    value: 0.1
+embed_dim:
+    value: 128
+eval_batch_size:
+    value: 128
+eval_every:
+    value: 1
+history_k:
+    value: 9
+lambda_rate:
+    value: 0
+learning_rate:
+    value: 0.0001
+log_to_wandb:
+    value: true
+loss_type:
+    value: bce
+max_iters:
+    value: 10
+model_type:
+    value: dt
+n_head:
+    value: 1
+n_layer:
+    value: 3
+num_steps_per_iter:
+    value: 20000
+pct_traj:
+    value: 1
+wandb_api_key:
+    value: ""
+warmup_steps:
+    value: 10000
+weight_decay:
+    value: 0.0001

@@ -1,0 +1,11 @@
+{"time":"2025-11-16T14:16:11.0159079-05:00","level":"INFO","msg":"stream: starting","core version":"0.22.1"}
+{"time":"2025-11-16T14:16:11.2548304-05:00","level":"INFO","msg":"stream: created new stream","id":"odra0ptv"}
+{"time":"2025-11-16T14:16:11.2553529-05:00","level":"INFO","msg":"handler: started","stream_id":"odra0ptv"}
+{"time":"2025-11-16T14:16:11.2568959-05:00","level":"INFO","msg":"stream: started","id":"odra0ptv"}
+{"time":"2025-11-16T14:16:11.2568959-05:00","level":"INFO","msg":"writer: started","stream_id":"odra0ptv"}
+{"time":"2025-11-16T14:16:11.2568959-05:00","level":"INFO","msg":"sender: started","stream_id":"odra0ptv"}
+{"time":"2025-11-16T14:16:11.5896562-05:00","level":"INFO","msg":"stream: closing","id":"odra0ptv"}
+{"time":"2025-11-16T14:16:12.0791524-05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-11-16T14:16:12.1892261-05:00","level":"INFO","msg":"handler: closed","stream_id":"odra0ptv"}
+{"time":"2025-11-16T14:16:12.1897352-05:00","level":"INFO","msg":"sender: closed","stream_id":"odra0ptv"}
+{"time":"2025-11-16T14:16:12.1897352-05:00","level":"INFO","msg":"stream: closed","id":"odra0ptv"}

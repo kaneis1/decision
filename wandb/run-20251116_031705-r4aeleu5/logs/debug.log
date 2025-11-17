@@ -1,0 +1,26 @@
+2025-11-16 03:17:05,330 INFO    MainThread:6584 [wandb_setup.py:_flush():81] Current SDK version is 0.22.1
+2025-11-16 03:17:05,330 INFO    MainThread:6584 [wandb_setup.py:_flush():81] Configure stats pid to 6584
+2025-11-16 03:17:05,330 INFO    MainThread:6584 [wandb_setup.py:_flush():81] Loading settings from C:\Users\kanie\.config\wandb\settings
+2025-11-16 03:17:05,330 INFO    MainThread:6584 [wandb_setup.py:_flush():81] Loading settings from D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\settings
+2025-11-16 03:17:05,330 INFO    MainThread:6584 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2025-11-16 03:17:05,330 INFO    MainThread:6584 [wandb_init.py:setup_run_log_directory():705] Logging user logs to D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\run-20251116_031705-r4aeleu5\logs\debug.log
+2025-11-16 03:17:05,331 INFO    MainThread:6584 [wandb_init.py:setup_run_log_directory():706] Logging internal logs to D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\run-20251116_031705-r4aeleu5\logs\debug-internal.log
+2025-11-16 03:17:05,331 INFO    MainThread:6584 [wandb_init.py:init():832] calling init triggers
+2025-11-16 03:17:05,331 INFO    MainThread:6584 [wandb_init.py:init():837] wandb.init called with sweep_config: {}
+config: {'csv_path': 'data/all_data.csv', 'K': 40, 'batch_size': 32, 'embed_dim': 64, 'n_layer': 2, 'n_head': 1, 'activation_function': 'relu', 'dropout': 0.1, 'learning_rate': 0.0001, 'weight_decay': 0.0001, 'warmup_steps': 100, 'max_iters': 10, 'num_steps_per_iter': 10000, 'device': 'cuda', 'log_to_wandb': True, 'wandb_api_key': '', 'num_folds': 5, 'fold_index': 0, 'fold_seed': 0, 'run_all_folds': True, 'model_type': 'dt', 'history_k': 5, '_wandb': {}}
+2025-11-16 03:17:05,331 INFO    MainThread:6584 [wandb_init.py:init():880] starting backend
+2025-11-16 03:17:07,596 INFO    MainThread:6584 [wandb_init.py:init():883] sending inform_init request
+2025-11-16 03:17:07,647 INFO    MainThread:6584 [wandb_init.py:init():891] backend started and connected
+2025-11-16 03:17:07,649 INFO    MainThread:6584 [wandb_init.py:init():961] updated telemetry
+2025-11-16 03:17:07,704 INFO    MainThread:6584 [wandb_init.py:init():985] communicating run to backend with 90.0 second timeout
+2025-11-16 03:17:08,110 INFO    MainThread:6584 [wandb_init.py:init():1036] starting run threads in backend
+2025-11-16 03:17:08,853 INFO    MainThread:6584 [wandb_run.py:_console_start():2506] atexit reg
+2025-11-16 03:17:08,853 INFO    MainThread:6584 [wandb_run.py:_redirect():2354] redirect: wrap_raw
+2025-11-16 03:17:08,853 INFO    MainThread:6584 [wandb_run.py:_redirect():2423] Wrapping output streams.
+2025-11-16 03:17:08,854 INFO    MainThread:6584 [wandb_run.py:_redirect():2446] Redirects installed.
+2025-11-16 03:17:08,860 INFO    MainThread:6584 [wandb_init.py:init():1076] run started, returning control to user process
+2025-11-16 04:09:11,849 INFO    MainThread:6584 [wandb_run.py:_finish():2272] finishing run kanielquits-emory-university/decision-transformer/r4aeleu5
+2025-11-16 04:09:11,879 INFO    MainThread:6584 [wandb_run.py:_atexit_cleanup():2471] got exitcode: 0
+2025-11-16 04:09:11,892 INFO    MainThread:6584 [wandb_run.py:_restore():2453] restore
+2025-11-16 04:09:11,894 INFO    MainThread:6584 [wandb_run.py:_restore():2459] restore done
+2025-11-16 04:09:12,541 INFO    MainThread:6584 [wandb_run.py:_footer_sync_info():3869] logging synced files

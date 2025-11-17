@@ -1,0 +1,8 @@
+================================================================================
+Iteration 1
+time/training: 24941.072611808777
+time/total: 24945.58338546753
+time/evaluation: 0.002523660659790039
+training/train_loss_mean: 0.41370957653224466
+training/train_loss_std: 0.053316348899355465
+training/action_error: 0.6497247219085693

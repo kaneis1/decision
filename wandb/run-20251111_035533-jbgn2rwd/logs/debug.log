@@ -1,0 +1,21 @@
+2025-11-11 03:55:33,807 INFO    MainThread:51828 [wandb_init.py:setup_run_log_directory():705] Logging user logs to D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\run-20251111_035533-jbgn2rwd\logs\debug.log
+2025-11-11 03:55:33,808 INFO    MainThread:51828 [wandb_init.py:setup_run_log_directory():706] Logging internal logs to D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\run-20251111_035533-jbgn2rwd\logs\debug-internal.log
+2025-11-11 03:55:33,808 INFO    MainThread:51828 [wandb_init.py:init():832] calling init triggers
+2025-11-11 03:55:33,808 INFO    MainThread:51828 [wandb_init.py:init():837] wandb.init called with sweep_config: {}
+config: {'csv_path': 'data/all_data.csv', 'K': 40, 'batch_size': 8, 'embed_dim': 64, 'n_layer': 2, 'n_head': 1, 'activation_function': 'relu', 'dropout': 0.1, 'learning_rate': 0.0001, 'weight_decay': 0.0001, 'warmup_steps': 10, 'max_iters': 10, 'num_steps_per_iter': 1000, 'device': 'cuda', 'log_to_wandb': True, 'wandb_api_key': '', 'num_folds': 5, 'fold_index': 3, 'fold_seed': 0, 'run_all_folds': True, '_wandb': {}}
+2025-11-11 03:55:33,808 INFO    MainThread:51828 [wandb_init.py:init():880] starting backend
+2025-11-11 03:55:33,808 INFO    MainThread:51828 [wandb_init.py:init():883] sending inform_init request
+2025-11-11 03:55:33,812 INFO    MainThread:51828 [wandb_init.py:init():891] backend started and connected
+2025-11-11 03:55:33,813 INFO    MainThread:51828 [wandb_init.py:init():961] updated telemetry
+2025-11-11 03:55:33,861 INFO    MainThread:51828 [wandb_init.py:init():985] communicating run to backend with 90.0 second timeout
+2025-11-11 03:55:34,170 INFO    MainThread:51828 [wandb_init.py:init():1036] starting run threads in backend
+2025-11-11 03:55:34,271 INFO    MainThread:51828 [wandb_run.py:_console_start():2506] atexit reg
+2025-11-11 03:55:34,271 INFO    MainThread:51828 [wandb_run.py:_redirect():2354] redirect: wrap_raw
+2025-11-11 03:55:34,271 INFO    MainThread:51828 [wandb_run.py:_redirect():2423] Wrapping output streams.
+2025-11-11 03:55:34,271 INFO    MainThread:51828 [wandb_run.py:_redirect():2446] Redirects installed.
+2025-11-11 03:55:34,277 INFO    MainThread:51828 [wandb_init.py:init():1076] run started, returning control to user process
+2025-11-11 04:12:35,879 INFO    MainThread:51828 [wandb_run.py:_finish():2272] finishing run kanielquits-emory-university/decision-transformer/jbgn2rwd
+2025-11-11 04:12:35,880 INFO    MainThread:51828 [wandb_run.py:_atexit_cleanup():2471] got exitcode: 0
+2025-11-11 04:12:35,881 INFO    MainThread:51828 [wandb_run.py:_restore():2453] restore
+2025-11-11 04:12:35,881 INFO    MainThread:51828 [wandb_run.py:_restore():2459] restore done
+2025-11-11 04:12:36,539 INFO    MainThread:51828 [wandb_run.py:_footer_sync_info():3869] logging synced files

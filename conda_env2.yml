@@ -1,0 +1,24 @@
+name: decision-transformer-gym2
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  # GPU PyTorch stack (CUDA 12.1, supports sm_120 / RTX 50-series)
+  - pytorch=2.4.* 
+  - torchvision=0.19.*
+  - torchaudio=2.4.*
+  - pytorch-cuda=12.1
+  # project deps
+  - numpy>=1.24
+  - h5py
+  - gymnasium=0.29.1
+  - pip
+  - pip:
+      - transformers>=4.40
+      - wandb
+      - tqdm
+      - packaging
+      - typing_extensions

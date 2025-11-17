@@ -1,0 +1,35 @@
+>>> Fold 1 | Iteration 1/10
+Traceback (most recent call last):
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 541, in <module>
+    main(args)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 505, in main
+    val_mse = train_single_fold(fold_idx, train_inds, val_inds)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 402, in train_single_fold
+    logs = trainer.train_iteration(num_steps=args.num_steps_per_iter, iter_num=itn, print_logs=True)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\training\trainer.py", line 30, in train_iteration
+    train_loss = self.train_step()
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\training\seq_trainer2.py", line 31, in train_step
+    state_preds, action_preds, reward_preds = self.model.forward(
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\gpt2_bc.py", line 85, in forward
+    transformer_outputs = self.transformer(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 731, in forward
+    outputs = block(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 302, in forward
+    attn_outputs = self.attn(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 235, in forward
+    attn_outputs = self._attn(query, key, value, attention_mask, head_mask, output_attentions)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 170, in _attn
+    w = torch.where(mask.bool(), w, self.masked_bias.to(w.dtype))
+RuntimeError: The size of tensor a (5) must match the size of tensor b (40) at non-singleton dimension 3

@@ -1,0 +1,23 @@
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_setup.py:_flush():81] Current SDK version is 0.22.0
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_setup.py:_flush():81] Configure stats pid to 11876
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_setup.py:_flush():81] Loading settings from C:\Users\kanie\.config\wandb\settings
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_setup.py:_flush():81] Loading settings from D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\settings
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_init.py:setup_run_log_directory():686] Logging user logs to D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\run-20251102_165532-hwxouoq9\logs\debug.log
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_init.py:setup_run_log_directory():687] Logging internal logs to D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\wandb\run-20251102_165532-hwxouoq9\logs\debug-internal.log
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_init.py:init():813] calling init triggers
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_init.py:init():818] wandb.init called with sweep_config: {}
+config: {'csv_path': 'data/all_data.csv', 'history_k': 9, 'K': 30, 'pct_traj': 1.0, 'batch_size': 128, 'eval_batch_size': 128, 'model_type': 'dt', 'embed_dim': 128, 'n_layer': 3, 'n_head': 1, 'activation_function': 'relu', 'dropout': 0.1, 'learning_rate': 0.0001, 'weight_decay': 0.0001, 'warmup_steps': 10000, 'max_iters': 10, 'num_steps_per_iter': 20000, 'device': 'cuda', 'loss_type': 'bce', 'lambda_rate': 0.0, 'eval_every': 1, 'log_to_wandb': True, 'wandb_api_key': '', '_wandb': {}}
+2025-11-02 16:55:32,217 INFO    MainThread:11876 [wandb_init.py:init():861] starting backend
+2025-11-02 16:55:34,846 INFO    MainThread:11876 [wandb_init.py:init():864] sending inform_init request
+2025-11-02 16:55:34,907 INFO    MainThread:11876 [wandb_init.py:init():872] backend started and connected
+2025-11-02 16:55:34,910 INFO    MainThread:11876 [wandb_init.py:init():942] updated telemetry
+2025-11-02 16:55:34,910 INFO    MainThread:11876 [wandb_init.py:init():966] communicating run to backend with 90.0 second timeout
+2025-11-02 16:55:35,782 INFO    MainThread:11876 [wandb_init.py:init():1017] starting run threads in backend
+2025-11-02 16:55:43,858 INFO    MainThread:11876 [wandb_run.py:_console_start():2506] atexit reg
+2025-11-02 16:55:43,858 INFO    MainThread:11876 [wandb_run.py:_redirect():2354] redirect: wrap_raw
+2025-11-02 16:55:43,858 INFO    MainThread:11876 [wandb_run.py:_redirect():2423] Wrapping output streams.
+2025-11-02 16:55:43,858 INFO    MainThread:11876 [wandb_run.py:_redirect():2446] Redirects installed.
+2025-11-02 16:55:43,863 INFO    MainThread:11876 [wandb_init.py:init():1057] run started, returning control to user process
+2025-11-02 18:21:51,318 INFO    wandb-AsyncioManager-main:11876 [service_client.py:_forward_responses():84] Reached EOF.
+2025-11-02 18:21:51,319 INFO    wandb-AsyncioManager-main:11876 [mailbox.py:close():137] Closing mailbox, abandoning 1 handles.

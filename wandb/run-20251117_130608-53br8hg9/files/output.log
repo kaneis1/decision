@@ -1,0 +1,147 @@
+>>> Fold 1 | Iteration 1/10
+================================================================================
+Iteration 1
+time/training: 77.32708430290222
+time/total: 81.51673984527588
+time/evaluation: 0.0
+training/train_loss_mean: -293.8662724089727
+training/train_loss_std: 230.59223911552428
+training/action_accuracy: 0.75
+Validation Accuracy: 0.559160
+>>> Fold 1 | Iteration 2/10
+================================================================================
+Iteration 2
+time/training: 80.29785704612732
+time/total: 224.6417510509491
+time/evaluation: 0.0
+training/train_loss_mean: -1463.143173677063
+training/train_loss_std: 602.1093727206596
+training/action_accuracy: 0.5625
+Validation Accuracy: 0.480290
+>>> Fold 1 | Iteration 3/10
+================================================================================
+Iteration 3
+time/training: 80.10876893997192
+time/total: 375.2248616218567
+time/evaluation: 0.0
+training/train_loss_mean: -3517.1195565704347
+training/train_loss_std: 1141.4739881449375
+training/action_accuracy: 0.46875
+Validation Accuracy: 0.383273
+>>> Fold 1 | Iteration 4/10
+================================================================================
+Iteration 4
+time/training: 78.04267072677612
+time/total: 513.9706184864044
+time/evaluation: 0.0
+training/train_loss_mean: -6396.080233813476
+training/train_loss_std: 1848.3719162313262
+training/action_accuracy: 0.5
+Validation Accuracy: 0.369568
+>>> Fold 1 | Iteration 5/10
+================================================================================
+Iteration 5
+time/training: 80.15916609764099
+time/total: 654.7489836215973
+time/evaluation: 0.0
+training/train_loss_mean: -10237.475230041504
+training/train_loss_std: 2792.602426519259
+training/action_accuracy: 0.5625
+Validation Accuracy: 0.385787
+>>> Fold 1 | Iteration 6/10
+================================================================================
+Iteration 6
+time/training: 80.71318888664246
+time/total: 796.2238023281097
+time/evaluation: 0.0
+training/train_loss_mean: -14899.805023901366
+training/train_loss_std: 3969.204621290659
+training/action_accuracy: 0.53125
+Validation Accuracy: 0.370416
+>>> Fold 1 | Iteration 7/10
+================================================================================
+Iteration 7
+time/training: 79.58756732940674
+time/total: 942.7776844501495
+time/evaluation: 0.0
+training/train_loss_mean: -20411.305664648437
+training/train_loss_std: 5258.614079505558
+training/action_accuracy: 0.5625
+Validation Accuracy: 0.398498
+>>> Fold 1 | Iteration 8/10
+================================================================================
+Iteration 8
+time/training: 81.71575665473938
+time/total: 1084.4405493736267
+time/evaluation: 0.0
+training/train_loss_mean: -26712.063022753908
+training/train_loss_std: 6831.079021063521
+training/action_accuracy: 0.59375
+Validation Accuracy: 0.392508
+>>> Fold 1 | Iteration 9/10
+================================================================================
+Iteration 9
+time/training: 77.74938178062439
+time/total: 1222.2443566322327
+time/evaluation: 0.0
+training/train_loss_mean: -34018.26471567383
+training/train_loss_std: 8681.59211384833
+training/action_accuracy: 0.53125
+Validation Accuracy: 0.391251
+>>> Fold 1 | Iteration 10/10
+================================================================================
+Iteration 10
+time/training: 72.86204171180725
+time/total: 1355.0354952812195
+time/evaluation: 0.0
+training/train_loss_mean: -42221.30313696289
+training/train_loss_std: 10647.446535684732
+training/action_accuracy: 0.4375
+Validation Accuracy: 0.386371
+
+======================================================================
+Evaluating IPD metrics for Fold 1/5
+======================================================================
+IPD Eval → Acc.t=1 0.718, Acc.t>1 0.650, LL.t=1 -5913, LL.t>1 -158054, Cor-Time -0.010, RMSE-Time 0.487, Cor-Avg 0.452, RMSE-Avg 0.284
+
+======================================================================
+Fold 1/5 - Performance Metrics
+======================================================================
+Metric               Value
+----------------------------------------------------------------------
+Acc. t = 1           0.718
+Acc. t > 1           0.650
+LL t = 1             -5913
+LL t > 1           -158054
+Cor-Time            -0.010
+Cor-Avg.             0.452
+RMSE-Time            0.487
+RMSE-Avg.            0.284
+======================================================================
+
+Fold 1/5 - MO β Coefficients (history_k=5)
+======================================================================
+Feature                     β Weight
+----------------------------------------------------------------------
+======================================================================
+
+
+======================================================================
+Evaluating Original MO Formula for Fold 1/5
+======================================================================
+MO Formula Eval → Acc.t=1 0.453, Acc.t>1 0.439, LL.t=1 -11628, LL.t>1 -951486, Cor-Time 0.080, RMSE-Time 0.504, Cor-Avg 0.498, RMSE-Avg 0.636
+
+======================================================================
+Fold 1/5 - Model Comparison
+======================================================================
+Metric                 DT Model      MO Formula
+----------------------------------------------------------------------
+Acc. t = 1                0.718           0.453
+Acc. t > 1                0.650           0.439
+LL t = 1                  -5913          -11628
+LL t > 1                -158054         -951486
+Cor-Time                 -0.010           0.080
+Cor-Avg.                  0.452           0.498
+RMSE-Time                 0.487           0.504
+RMSE-Avg.                 0.284           0.636
+======================================================================

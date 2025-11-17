@@ -1,0 +1,96 @@
+_wandb:
+    value:
+        cli_version: 0.22.1
+        e:
+            z8i1b5eay7hv4vj7n0vl91v1q0wljs0k:
+                args:
+                    - --model_type
+                    - dt
+                    - --device
+                    - cuda
+                    - --log_to_wandb
+                    - --wandb_api_key
+                    - 889a0de04c1241fab6a818f65630479b0eef563a
+                codePath: decision-transformer\ipd\train_ipd_dt.py
+                codePathLocal: train_ipd_dt.py
+                cpu_count: 8
+                cpu_count_logical: 16
+                cudaVersion: "13.0"
+                disk:
+                    /:
+                        total: "649178730496"
+                        used: "503823261696"
+                email: kanielquits@gmail.com
+                executable: C:\Users\kanie\.conda\envs\decision-transformer-gym2\python.exe
+                git:
+                    commit: 36857b90e5ec4a6064e43e5e9f2d1bfcd1f1ea7a
+                    remote: https://github.com/kaneis1/Decision-transformer.git
+                gpu: NVIDIA GeForce RTX 5060 Laptop GPU
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Blackwell
+                      cudaCores: 3328
+                      memoryTotal: "8546942976"
+                      name: NVIDIA GeForce RTX 5060 Laptop GPU
+                      uuid: GPU-9861f1dc-6849-3886-ebd4-8667cf017a97
+                host: Kaneis
+                memory:
+                    total: "15885135872"
+                os: Windows-10-10.0.26100-SP0
+                program: D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\train_ipd_dt.py
+                python: CPython 3.10.18
+                root: D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd
+                startedAt: "2025-10-14T01:35:46.428687Z"
+                writerId: z8i1b5eay7hv4vj7n0vl91v1q0wljs0k
+        m: []
+        python_version: 3.10.18
+        t:
+            "1":
+                - 1
+                - 11
+                - 41
+                - 49
+            "2":
+                - 1
+                - 11
+                - 41
+                - 49
+            "3":
+                - 3
+                - 13
+                - 16
+            "4": 3.10.18
+            "5": 0.22.1
+            "6": 4.56.2
+            "8":
+                - 3
+            "12": 0.22.1
+            "13": windows-amd64
+K:
+    value: 20
+batch_size:
+    value: 64
+dropout:
+    value: 0.1
+embed_dim:
+    value: 128
+learning_rate:
+    value: 0.0001
+max_iters:
+    value: 100
+model_type:
+    value: dt
+n_head:
+    value: 1
+n_layer:
+    value: 3
+num_steps_per_iter:
+    value: 1000
+pct_traj:
+    value: 1
+seed:
+    value: 42
+warmup_steps:
+    value: 10000
+weight_decay:
+    value: 0.0001

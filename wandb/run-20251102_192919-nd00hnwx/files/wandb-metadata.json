@@ -1,0 +1,41 @@
+{
+  "os": "Windows-10-10.0.26100-SP0",
+  "python": "CPython 3.10.18",
+  "startedAt": "2025-11-03T00:29:19.561706Z",
+  "args": [
+    "--log_to_wandb",
+    "--csv_path",
+    "data/all_data.csv"
+  ],
+  "program": "D:\\OneDrive - Emory\\Emory CS\\Decision-transformer\\decision-transformer\\ipd\\experiment_ipd_csv_rate.py",
+  "codePath": "experiment_ipd_csv_rate.py",
+  "codePathLocal": "experiment_ipd_csv_rate.py",
+  "email": "kanielquits@gmail.com",
+  "root": "D:\\OneDrive - Emory\\Emory CS\\Decision-transformer\\decision-transformer\\ipd",
+  "host": "Kaneis",
+  "executable": "C:\\Users\\kanie\\.conda\\envs\\decision-transformer-gym2\\python.exe",
+  "cpu_count": 8,
+  "cpu_count_logical": 16,
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "649178730496",
+      "used": "507116113920"
+    }
+  },
+  "memory": {
+    "total": "15885135872"
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "memoryTotal": "8546942976",
+      "cudaCores": 3328,
+      "architecture": "Blackwell",
+      "uuid": "GPU-9861f1dc-6849-3886-ebd4-8667cf017a97"
+    }
+  ],
+  "cudaVersion": "13.0",
+  "writerId": "4j03rn9n57dsqrn9c9h1gf030f427enh"
+}

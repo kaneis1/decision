@@ -1,0 +1,100 @@
+>>> Fold 5 | Iteration 1/10
+================================================================================
+Iteration 1
+time/training: 2.816039800643921
+time/total: 3.638535976409912
+time/evaluation: 0.0
+training/train_loss_mean: 0.42052155554294585
+training/train_loss_std: 0.12474983128368218
+training/action_error: 0.30355918407440186
+Validation MSE: 0.274627
+>>> Fold 5 | Iteration 2/10
+================================================================================
+Iteration 2
+time/training: 2.9579834938049316
+time/total: 790.0858385562897
+time/evaluation: 0.0015125274658203125
+training/train_loss_mean: 0.2366634315252304
+training/train_loss_std: 0.03238354529082994
+training/action_error: 0.196567565202713
+Validation MSE: 0.204571
+>>> Fold 5 | Iteration 3/10
+================================================================================
+Iteration 3
+time/training: 2.256685495376587
+time/total: 1539.1375653743744
+time/evaluation: 0.0
+training/train_loss_mean: 0.18996098458766938
+training/train_loss_std: 0.025800918981037355
+training/action_error: 0.15718694031238556
+Validation MSE: 0.177602
+>>> Fold 5 | Iteration 4/10
+================================================================================
+Iteration 4
+time/training: 2.1330673694610596
+time/total: 2290.636824607849
+time/evaluation: 0.0009999275207519531
+training/train_loss_mean: 0.16223033830523492
+training/train_loss_std: 0.022706718067010714
+training/action_error: 0.12037114053964615
+Validation MSE: 0.161644
+>>> Fold 5 | Iteration 5/10
+================================================================================
+Iteration 5
+time/training: 3.122244119644165
+time/total: 5136.470739364624
+time/evaluation: 0.0
+training/train_loss_mean: 0.14496952593326567
+training/train_loss_std: 0.022194993420793924
+training/action_error: 0.17363327741622925
+Validation MSE: 0.153929
+>>> Fold 5 | Iteration 6/10
+================================================================================
+Iteration 6
+time/training: 3.188643217086792
+time/total: 6148.836328268051
+time/evaluation: 0.0
+training/train_loss_mean: 0.14029328987002374
+training/train_loss_std: 0.02676537346161991
+training/action_error: 0.14225545525550842
+Validation MSE: 0.149304
+>>> Fold 5 | Iteration 7/10
+================================================================================
+Iteration 7
+time/training: 3.0904390811920166
+time/total: 7240.465254545212
+time/evaluation: 0.0
+training/train_loss_mean: 0.1380004359781742
+training/train_loss_std: 0.0211821109371713
+training/action_error: 0.10390758514404297
+Validation MSE: 0.145141
+>>> Fold 5 | Iteration 8/10
+================================================================================
+Iteration 8
+time/training: 3.1186683177948
+time/total: 8261.816744327545
+time/evaluation: 0.0010008811950683594
+training/train_loss_mean: 0.13533668503165244
+training/train_loss_std: 0.025633754456963437
+training/action_error: 0.16437533497810364
+Validation MSE: 0.143093
+>>> Fold 5 | Iteration 9/10
+================================================================================
+Iteration 9
+time/training: 3.1681671142578125
+time/total: 9312.411874771118
+time/evaluation: 0.0
+training/train_loss_mean: 0.12907866388559341
+training/train_loss_std: 0.02512373665290635
+training/action_error: 0.10914653539657593
+Validation MSE: 0.140693
+>>> Fold 5 | Iteration 10/10
+================================================================================
+Iteration 10
+time/training: 2.8615493774414062
+time/total: 10886.954454421997
+time/evaluation: 0.0
+training/train_loss_mean: 0.12930127680301667
+training/train_loss_std: 0.027710860499597888
+training/action_error: 0.17448222637176514
+Validation MSE: 0.138216

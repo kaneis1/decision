@@ -1,0 +1,112 @@
+_wandb:
+    value:
+        cli_version: 0.22.1
+        e:
+            ngph44jn1dvdo2etzrkig61rzdjg1cmm:
+                args:
+                    - --csv_path
+                    - data/all_data.csv
+                    - --batch_size
+                    - "8"
+                    - --num_steps_per_iter
+                    - "50"
+                    - --warmup_steps
+                    - "1"
+                    - --log_to_wandb
+                codePath: decision-transformer\ipd\experiment_ipd.py
+                codePathLocal: experiment_ipd.py
+                cpu_count: 8
+                cpu_count_logical: 16
+                cudaVersion: "13.0"
+                disk:
+                    /:
+                        total: "649178730496"
+                        used: "577010806784"
+                email: kanielquits@gmail.com
+                executable: C:\Users\kanie\.conda\envs\decision-transformer-gym2\python.exe
+                git:
+                    commit: 36857b90e5ec4a6064e43e5e9f2d1bfcd1f1ea7a
+                    remote: https://github.com/kaneis1/Decision-transformer.git
+                gpu: NVIDIA GeForce RTX 5060 Laptop GPU
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Blackwell
+                      cudaCores: 3328
+                      memoryTotal: "8546942976"
+                      name: NVIDIA GeForce RTX 5060 Laptop GPU
+                      uuid: GPU-9861f1dc-6849-3886-ebd4-8667cf017a97
+                host: Kaneis
+                memory:
+                    total: "15885135872"
+                os: Windows-10-10.0.26100-SP0
+                program: D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd.py
+                python: CPython 3.10.18
+                root: D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd
+                startedAt: "2025-11-10T18:00:03.581541Z"
+                writerId: ngph44jn1dvdo2etzrkig61rzdjg1cmm
+        m: []
+        python_version: 3.10.18
+        t:
+            "1":
+                - 1
+                - 11
+                - 41
+                - 49
+            "2":
+                - 1
+                - 11
+                - 41
+                - 49
+            "3":
+                - 2
+                - 13
+                - 16
+            "4": 3.10.18
+            "5": 0.22.1
+            "6": 4.56.2
+            "8":
+                - 3
+            "12": 0.22.1
+            "13": windows-amd64
+K:
+    value: 20
+activation_function:
+    value: relu
+batch_size:
+    value: 8
+csv_path:
+    value: data/all_data.csv
+device:
+    value: cuda
+dropout:
+    value: 0.1
+embed_dim:
+    value: 64
+fold_index:
+    value: 1
+fold_seed:
+    value: 0
+history_k:
+    value: 3
+learning_rate:
+    value: 0.0001
+log_to_wandb:
+    value: true
+max_iters:
+    value: 10
+n_head:
+    value: 1
+n_layer:
+    value: 2
+num_folds:
+    value: 5
+num_steps_per_iter:
+    value: 50
+run_all_folds:
+    value: true
+wandb_api_key:
+    value: ""
+warmup_steps:
+    value: 1
+weight_decay:
+    value: 0.0001

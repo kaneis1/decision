@@ -1,0 +1,114 @@
+>>> Fold 1 | Iteration 1/10
+================================================================================
+Iteration 1
+time/training: 90.55189824104309
+time/total: 94.33777475357056
+time/evaluation: 0.0
+training/train_loss_mean: 28.02305813000202
+training/train_loss_std: 6.8664212727252565
+training/action_error: 35.47728729248047
+Validation MSE: 27.337327
+>>> Fold 1 | Iteration 2/10
+================================================================================
+Iteration 2
+time/training: 105.8171136379242
+time/total: 295.5398209095001
+time/evaluation: 0.0
+training/train_loss_mean: 27.836013467407227
+training/train_loss_std: 6.747780138443481
+training/action_error: 22.831466674804688
+Validation MSE: 27.335806
+>>> Fold 1 | Iteration 3/10
+================================================================================
+Iteration 3
+time/training: 134.49831748008728
+time/total: 525.0541772842407
+time/evaluation: 0.0
+training/train_loss_mean: 27.926219821596145
+training/train_loss_std: 6.730765294470817
+training/action_error: 32.98599624633789
+Validation MSE: 27.334946
+>>> Fold 1 | Iteration 4/10
+================================================================================
+Iteration 4
+time/training: 139.0705213546753
+time/total: 782.6728150844574
+time/evaluation: 0.0
+training/train_loss_mean: 27.84049410200119
+training/train_loss_std: 6.865766872401708
+training/action_error: 37.9880485534668
+Validation MSE: 27.334354
+>>> Fold 1 | Iteration 5/10
+================================================================================
+Iteration 5
+time/training: 142.8760941028595
+time/total: 1043.9523899555206
+time/evaluation: 0.0
+training/train_loss_mean: 27.878481298923493
+training/train_loss_std: 6.795243335594919
+training/action_error: 35.47150421142578
+Validation MSE: 27.334974
+>>> Fold 1 | Iteration 6/10
+================================================================================
+Iteration 6
+time/training: 140.5868456363678
+time/total: 1303.4559383392334
+time/evaluation: 0.0
+training/train_loss_mean: 27.805147574710848
+training/train_loss_std: 6.749648525715813
+training/action_error: 25.3693790435791
+Validation MSE: 27.334543
+>>> Fold 1 | Iteration 7/10
+================================================================================
+Iteration 7
+time/training: 139.62747049331665
+time/total: 1561.5752217769623
+time/evaluation: 0.0
+training/train_loss_mean: 27.790494407176972
+training/train_loss_std: 6.746850528024665
+training/action_error: 25.415576934814453
+Validation MSE: 27.334288
+>>> Fold 1 | Iteration 8/10
+================================================================================
+Iteration 8
+time/training: 137.37221837043762
+time/total: 1822.3715527057648
+time/evaluation: 0.0
+training/train_loss_mean: 27.779066047406197
+training/train_loss_std: 6.756405490684146
+training/action_error: 40.525150299072266
+Validation MSE: 27.334814
+>>> Fold 1 | Iteration 9/10
+================================================================================
+Iteration 9
+time/training: 139.6654450893402
+time/total: 2080.378915309906
+time/evaluation: 0.0009999275207519531
+training/train_loss_mean: 27.67412925992012
+training/train_loss_std: 6.768496915313399
+training/action_error: 25.351421356201172
+Validation MSE: 27.333703
+>>> Fold 1 | Iteration 10/10
+================================================================================
+Iteration 10
+time/training: 142.15959072113037
+time/total: 2341.6871869564056
+time/evaluation: 0.0
+training/train_loss_mean: 27.880414382219314
+training/train_loss_std: 6.777542167388881
+training/action_error: 25.332889556884766
+Validation MSE: 27.334527
+
+======================================================================
+Evaluating IPD metrics for Fold 1/5
+======================================================================
+Traceback (most recent call last):
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 594, in <module>
+    main(args)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 558, in main
+    val_mse = train_single_fold(fold_idx, train_inds, val_inds)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 469, in train_single_fold
+    metrics = evaluate_ipd_metrics_and_betas(
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\evaluation\evaluate_ipd.py", line 148, in evaluate_ipd_metrics_and_betas
+    _, a_pred, _ = model.forward(
+TypeError: GPT2BCModel.forward() got multiple values for argument 'attention_mask'

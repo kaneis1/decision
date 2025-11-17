@@ -1,0 +1,58 @@
+================================================================================
+Iteration 1
+time/training: 5167.059033632278
+time/total: 5178.988420248032
+time/evaluation: 0.00033164024353027344
+training/train_loss_mean: 0.41632954370230435
+training/train_loss_std: 0.06098249372854809
+training/action_error: 0.6772378087043762
+Traceback (most recent call last):
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd_csv_rate.py", line 457, in <module>
+    main(args)
+    ~~~~^^^^^^
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd_csv_rate.py", line 422, in main
+    logs.update(eval_once())
+                ~~~~~~~~~^^
+  File "C:\Users\kanie\AppData\Roaming\Python\Python313\site-packages\torch\utils\_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd_csv_rate.py", line 407, in eval_once
+    s_hat, a_hat, r_hat = model.forward(s, a, r, rtg[:,:-1], ts)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\decision_transformer.py", line 86, in forward
+    transformer_outputs = self.transformer(
+        inputs_embeds=stacked_inputs,
+        attention_mask=stacked_attention_mask,
+    )
+  File "C:\Users\kanie\AppData\Roaming\Python\Python313\site-packages\torch\nn\modules\module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanie\AppData\Roaming\Python\Python313\site-packages\torch\nn\modules\module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 731, in forward
+    outputs = block(
+        hidden_states,
+    ...<6 lines>...
+        output_attentions=output_attentions,
+    )
+  File "C:\Users\kanie\AppData\Roaming\Python\Python313\site-packages\torch\nn\modules\module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanie\AppData\Roaming\Python\Python313\site-packages\torch\nn\modules\module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 302, in forward
+    attn_outputs = self.attn(
+        self.ln_1(hidden_states),
+    ...<4 lines>...
+        output_attentions=output_attentions,
+    )
+  File "C:\Users\kanie\AppData\Roaming\Python\Python313\site-packages\torch\nn\modules\module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanie\AppData\Roaming\Python\Python313\site-packages\torch\nn\modules\module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 235, in forward
+    attn_outputs = self._attn(query, key, value, attention_mask, head_mask, output_attentions)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 174, in _attn
+    w = w + attention_mask
+        ~~^~~~~~~~~~~~~~~~
+RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu!

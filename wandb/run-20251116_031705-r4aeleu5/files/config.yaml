@@ -1,0 +1,108 @@
+_wandb:
+    value:
+        cli_version: 0.22.1
+        e:
+            9axri63vbxty40u6s6dvy713bbpc4m7d:
+                args:
+                    - --history_k
+                    - "5"
+                    - --log_to_wandb
+                codePath: decision-transformer\ipd\experiment_ipd2.py
+                codePathLocal: experiment_ipd2.py
+                cpu_count: 8
+                cpu_count_logical: 16
+                cudaVersion: "13.0"
+                disk:
+                    /:
+                        total: "649178730496"
+                        used: "585317281792"
+                email: kanielquits@gmail.com
+                executable: C:\Users\kanie\.conda\envs\decision-transformer-gym2\python.exe
+                git:
+                    commit: ca9780e197ac3958617888d2c9b707d80a933340
+                    remote: https://github.com/kaneis1/Decision-transformer.git
+                gpu: NVIDIA GeForce RTX 5060 Laptop GPU
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Blackwell
+                      cudaCores: 3328
+                      memoryTotal: "8546942976"
+                      name: NVIDIA GeForce RTX 5060 Laptop GPU
+                      uuid: GPU-9861f1dc-6849-3886-ebd4-8667cf017a97
+                host: Kaneis
+                memory:
+                    total: "15885135872"
+                os: Windows-10-10.0.26100-SP0
+                program: D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py
+                python: CPython 3.10.18
+                root: D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd
+                startedAt: "2025-11-16T08:17:05.324602Z"
+                writerId: 9axri63vbxty40u6s6dvy713bbpc4m7d
+        m: []
+        python_version: 3.10.18
+        t:
+            "1":
+                - 1
+                - 11
+                - 41
+                - 49
+            "2":
+                - 1
+                - 11
+                - 41
+                - 49
+            "3":
+                - 2
+                - 13
+                - 16
+            "4": 3.10.18
+            "5": 0.22.1
+            "6": 4.56.2
+            "8":
+                - 3
+            "12": 0.22.1
+            "13": windows-amd64
+K:
+    value: 40
+activation_function:
+    value: relu
+batch_size:
+    value: 32
+csv_path:
+    value: data/all_data.csv
+device:
+    value: cuda
+dropout:
+    value: 0.1
+embed_dim:
+    value: 64
+fold_index:
+    value: 0
+fold_seed:
+    value: 0
+history_k:
+    value: 5
+learning_rate:
+    value: 0.0001
+log_to_wandb:
+    value: true
+max_iters:
+    value: 10
+model_type:
+    value: dt
+n_head:
+    value: 1
+n_layer:
+    value: 2
+num_folds:
+    value: 5
+num_steps_per_iter:
+    value: 10000
+run_all_folds:
+    value: true
+wandb_api_key:
+    value: ""
+warmup_steps:
+    value: 100
+weight_decay:
+    value: 0.0001

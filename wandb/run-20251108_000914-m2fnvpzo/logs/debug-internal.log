@@ -1,0 +1,12 @@
+{"time":"2025-11-08T00:09:17.0969736-05:00","level":"INFO","msg":"stream: starting","core version":"0.22.1"}
+{"time":"2025-11-08T00:09:17.6157115-05:00","level":"INFO","msg":"stream: created new stream","id":"m2fnvpzo"}
+{"time":"2025-11-08T00:09:17.6167656-05:00","level":"INFO","msg":"handler: started","stream_id":"m2fnvpzo"}
+{"time":"2025-11-08T00:09:17.6267225-05:00","level":"INFO","msg":"stream: started","id":"m2fnvpzo"}
+{"time":"2025-11-08T00:09:17.6267225-05:00","level":"INFO","msg":"sender: started","stream_id":"m2fnvpzo"}
+{"time":"2025-11-08T00:09:17.6267225-05:00","level":"INFO","msg":"writer: started","stream_id":"m2fnvpzo"}
+{"time":"2025-11-08T11:01:04.6488605-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kanielquits-emory-university/decision-transformer/m2fnvpzo/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2025-11-08T11:10:58.6146799-05:00","level":"INFO","msg":"stream: closing","id":"m2fnvpzo"}
+{"time":"2025-11-08T11:10:59.070052-05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-11-08T11:10:59.2279792-05:00","level":"INFO","msg":"handler: closed","stream_id":"m2fnvpzo"}
+{"time":"2025-11-08T11:10:59.2290257-05:00","level":"INFO","msg":"sender: closed","stream_id":"m2fnvpzo"}
+{"time":"2025-11-08T11:10:59.2290257-05:00","level":"INFO","msg":"stream: closed","id":"m2fnvpzo"}

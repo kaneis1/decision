@@ -1,0 +1,16 @@
+{"time":"2025-11-10T14:25:25.0633695-05:00","level":"INFO","msg":"stream: starting","core version":"0.22.1"}
+{"time":"2025-11-10T14:25:25.2571086-05:00","level":"INFO","msg":"stream: created new stream","id":"2awigb94"}
+{"time":"2025-11-10T14:25:25.2576422-05:00","level":"INFO","msg":"handler: started","stream_id":"2awigb94"}
+{"time":"2025-11-10T14:25:25.259218-05:00","level":"INFO","msg":"sender: started","stream_id":"2awigb94"}
+{"time":"2025-11-10T14:25:25.2597481-05:00","level":"INFO","msg":"stream: started","id":"2awigb94"}
+{"time":"2025-11-10T14:25:25.2597481-05:00","level":"INFO","msg":"writer: started","stream_id":"2awigb94"}
+{"time":"2025-11-10T15:49:41.9503746-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kanielquits-emory-university/decision-transformer/2awigb94/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2025-11-10T15:49:44.442718-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kanielquits-emory-university/decision-transformer/2awigb94/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2025-11-10T15:49:49.4118432-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kanielquits-emory-university/decision-transformer/2awigb94/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2025-11-10T17:23:59.6636154-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kanielquits-emory-university/decision-transformer/2awigb94/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2025-11-10T17:43:32.695477-05:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"updating run metadata","runtime_seconds":0.0154403}],"total_operations":1}}
+{"time":"2025-11-10T17:43:33.2277919-05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-11-10T17:43:33.4116417-05:00","level":"INFO","msg":"stream: closing","id":"2awigb94"}
+{"time":"2025-11-10T17:43:33.4116417-05:00","level":"INFO","msg":"handler: closed","stream_id":"2awigb94"}
+{"time":"2025-11-10T17:43:33.412718-05:00","level":"INFO","msg":"sender: closed","stream_id":"2awigb94"}
+{"time":"2025-11-10T17:43:33.412718-05:00","level":"INFO","msg":"stream: closed","id":"2awigb94"}

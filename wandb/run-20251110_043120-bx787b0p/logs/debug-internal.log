@@ -1,0 +1,13 @@
+{"time":"2025-11-10T04:31:22.4373925-05:00","level":"INFO","msg":"stream: starting","core version":"0.22.1"}
+{"time":"2025-11-10T04:31:22.9511019-05:00","level":"INFO","msg":"stream: created new stream","id":"bx787b0p"}
+{"time":"2025-11-10T04:31:22.9511019-05:00","level":"INFO","msg":"handler: started","stream_id":"bx787b0p"}
+{"time":"2025-11-10T04:31:22.9613164-05:00","level":"INFO","msg":"stream: started","id":"bx787b0p"}
+{"time":"2025-11-10T04:31:22.9613164-05:00","level":"INFO","msg":"writer: started","stream_id":"bx787b0p"}
+{"time":"2025-11-10T04:31:22.9618352-05:00","level":"INFO","msg":"sender: started","stream_id":"bx787b0p"}
+{"time":"2025-11-10T12:34:09.885649-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kanielquits-emory-university/decision-transformer/bx787b0p/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2025-11-10T13:00:02.4624618-05:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"updating run metadata","runtime_seconds":0.0015882}],"total_operations":1}}
+{"time":"2025-11-10T13:00:02.966154-05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-11-10T13:00:03.1963455-05:00","level":"INFO","msg":"stream: closing","id":"bx787b0p"}
+{"time":"2025-11-10T13:00:03.1963455-05:00","level":"INFO","msg":"handler: closed","stream_id":"bx787b0p"}
+{"time":"2025-11-10T13:00:03.1968771-05:00","level":"INFO","msg":"sender: closed","stream_id":"bx787b0p"}
+{"time":"2025-11-10T13:00:03.1968771-05:00","level":"INFO","msg":"stream: closed","id":"bx787b0p"}

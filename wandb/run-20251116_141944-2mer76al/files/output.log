@@ -1,0 +1,19 @@
+>>> Fold 1 | Iteration 1/10
+================================================================================
+Iteration 1
+time/training: 90.40633535385132
+time/total: 94.18920850753784
+time/evaluation: 0.0
+training/train_loss_mean: 27.92919922633171
+training/train_loss_std: 6.782893517044061
+training/action_error: 27.880231857299805
+Traceback (most recent call last):
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 568, in <module>
+    main(args)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 532, in main
+    val_mse = train_single_fold(fold_idx, train_inds, val_inds)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 432, in train_single_fold
+    val_mse = compute_val_mse()
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 378, in compute_val_mse
+    _, action_preds, _ = model.forward(
+TypeError: GPT2BCModel.forward() got multiple values for argument 'attention_mask'

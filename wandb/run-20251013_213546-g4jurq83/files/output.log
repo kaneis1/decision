@@ -1,0 +1,21 @@
+
+W&B logging initialized: ipd-dt-dt-770487
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+Traceback (most recent call last):
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\train_ipd_dt.py", line 567, in <module>
+    model, trainer = train_ipd_dt(
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\train_ipd_dt.py", line 438, in train_ipd_dt
+    wandb.save(__file__)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\wandb_run.py", line 444, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\wandb_run.py", line 2126, in save
+    return self._save(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\wandb\sdk\wandb_run.py", line 2185, in _save
+    target_path.symlink_to(source_path)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\pathlib.py", line 1255, in symlink_to
+    self._accessor.symlink(target, self, target_is_directory)
+OSError: [WinError 1314] A required privilege is not held by the client: 'D:\\OneDrive - Emory\\Emory CS\\Decision-transformer\\decision-transformer\\ipd\\train_ipd_dt.py' -> 'D:\\OneDrive - Emory\\Emory CS\\Decision-transformer\\decision-transformer\\ipd\\wandb\\run-20251013_213546-g4jurq83\\files\\ipd\\train_ipd_dt.py'

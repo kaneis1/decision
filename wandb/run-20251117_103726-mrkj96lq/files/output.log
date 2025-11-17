@@ -1,0 +1,79 @@
+>>> Fold 1 | Iteration 1/10
+================================================================================
+Iteration 1
+time/training: 77.08522582054138
+time/total: 81.62121438980103
+time/evaluation: 0.0
+training/train_loss_mean: -265.9142467097148
+training/train_loss_std: 213.07437444359556
+training/action_accuracy: 0.28125
+Validation Accuracy: 0.349581
+>>> Fold 1 | Iteration 2/10
+================================================================================
+Iteration 2
+time/training: 74.02343344688416
+time/total: 210.75179052352905
+time/evaluation: 0.0
+training/train_loss_mean: -1189.511704599762
+training/train_loss_std: 453.5113086722479
+training/action_accuracy: 0.40625
+Validation Accuracy: 0.365331
+>>> Fold 1 | Iteration 3/10
+================================================================================
+Iteration 3
+time/training: 68.12030386924744
+time/total: 331.36912775039673
+time/evaluation: 0.0009989738464355469
+training/train_loss_mean: -2652.9949146362305
+training/train_loss_std: 845.0220619387368
+training/action_accuracy: 0.625
+Validation Accuracy: 0.372607
+>>> Fold 1 | Iteration 4/10
+================================================================================
+Iteration 4
+time/training: 75.95568299293518
+time/total: 465.95137333869934
+time/evaluation: 0.0
+training/train_loss_mean: -4697.499778411865
+training/train_loss_std: 1360.4640717518957
+training/action_accuracy: 0.34375
+Validation Accuracy: 0.348178
+>>> Fold 1 | Iteration 5/10
+Traceback (most recent call last):
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 614, in <module>
+    main(args)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 578, in main
+    val_accuracy = train_single_fold(fold_idx, train_inds, val_inds)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 475, in train_single_fold
+    logs = trainer.train_iteration(num_steps=args.num_steps_per_iter, iter_num=itn, print_logs=True)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\training\trainer.py", line 30, in train_iteration
+    train_loss = self.train_step()
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\training\seq_trainer2.py", line 31, in train_step
+    state_preds, action_preds, reward_preds = self.model.forward(
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\gpt2_bc.py", line 77, in forward
+    transformer_outputs = self.transformer(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 731, in forward
+    outputs = block(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 302, in forward
+    attn_outputs = self.attn(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\models\trajectory_gpt2.py", line 220, in forward
+    query, key, value = self.c_attn(hidden_states).split(self.split_size, dim=2)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\transformers\pytorch_utils.py", line 122, in forward
+    x = torch.addmm(self.bias, x.view(-1, x.size(-1)), self.weight)
+KeyboardInterrupt

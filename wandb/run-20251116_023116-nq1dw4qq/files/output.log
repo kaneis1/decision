@@ -1,0 +1,99 @@
+>>> Fold 2 | Iteration 1/10
+================================================================================
+Iteration 1
+time/training: 163.61834692955017
+time/total: 164.7950484752655
+time/evaluation: 0.0015037059783935547
+training/train_loss_mean: 0.11876650045625865
+training/train_loss_std: 0.08553935828160426
+training/action_error: 0.1085820198059082
+Validation MSE: 0.098671
+>>> Fold 2 | Iteration 2/10
+================================================================================
+Iteration 2
+time/training: 161.29169726371765
+time/total: 480.30800676345825
+time/evaluation: 0.0009982585906982422
+training/train_loss_mean: 0.10240076431520283
+training/train_loss_std: 0.023598375449860966
+training/action_error: 0.13102702796459198
+Validation MSE: 0.097512
+>>> Fold 2 | Iteration 3/10
+================================================================================
+Iteration 3
+time/training: 175.23402523994446
+time/total: 803.3238599300385
+time/evaluation: 0.001004934310913086
+training/train_loss_mean: 0.10039813578799367
+training/train_loss_std: 0.023638442462744557
+training/action_error: 0.07920705527067184
+Validation MSE: 0.097101
+>>> Fold 2 | Iteration 4/10
+================================================================================
+Iteration 4
+time/training: 164.5994565486908
+time/total: 1107.243536233902
+time/evaluation: 0.0
+training/train_loss_mean: 0.09977831366434693
+training/train_loss_std: 0.023278716210594488
+training/action_error: 0.0768236592411995
+Validation MSE: 0.095901
+>>> Fold 2 | Iteration 5/10
+================================================================================
+Iteration 5
+time/training: 156.6767976284027
+time/total: 1406.1912224292755
+time/evaluation: 0.0
+training/train_loss_mean: 0.09857228441871703
+training/train_loss_std: 0.023345457923837364
+training/action_error: 0.13574177026748657
+Validation MSE: 0.095748
+>>> Fold 2 | Iteration 6/10
+================================================================================
+Iteration 6
+time/training: 151.7315435409546
+time/total: 1699.7305488586426
+time/evaluation: 0.0
+training/train_loss_mean: 0.09821083505414427
+training/train_loss_std: 0.022949622073751386
+training/action_error: 0.10129867494106293
+Validation MSE: 0.095721
+>>> Fold 2 | Iteration 7/10
+================================================================================
+Iteration 7
+time/training: 159.1591033935547
+time/total: 2000.6843316555023
+time/evaluation: 0.0005052089691162109
+training/train_loss_mean: 0.09789276806544513
+training/train_loss_std: 0.023153925960475275
+training/action_error: 0.10534816980361938
+Validation MSE: 0.095647
+>>> Fold 2 | Iteration 8/10
+================================================================================
+Iteration 8
+time/training: 165.25015997886658
+time/total: 2325.0576338768005
+time/evaluation: 0.0
+training/train_loss_mean: 0.09663726211823523
+training/train_loss_std: 0.02289044984631597
+training/action_error: 0.09709028154611588
+Validation MSE: 0.095496
+>>> Fold 2 | Iteration 9/10
+Traceback (most recent call last):
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 539, in <module>
+    parser.add_argument("--history_k", type=int, default=1, help="Number of history decision columns to include in MO (default: 1). When history_k=3, includes my.decision1-3 and other.decision1-3")
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 503, in main
+    train_inds = np.concatenate([folds[i] for i in range(num_folds) if i != fold_idx])
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\experiment_ipd2.py", line 402, in train_single_fold
+    logs = trainer.train_iteration(num_steps=args.num_steps_per_iter, iter_num=itn, print_logs=True)
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\training\trainer.py", line 30, in train_iteration
+    train_loss = self.train_step()
+  File "D:\OneDrive - Emory\Emory CS\Decision-transformer\decision-transformer\ipd\decision_transformer\training\seq_trainer2.py", line 29, in train_step
+    loss.backward()
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\_tensor.py", line 647, in backward
+    torch.autograd.backward(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\autograd\__init__.py", line 354, in backward
+    _engine_run_backward(
+  File "C:\Users\kanie\.conda\envs\decision-transformer-gym2\lib\site-packages\torch\autograd\graph.py", line 829, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt

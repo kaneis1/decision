@@ -1,0 +1,43 @@
+{
+  "os": "Windows-10-10.0.26100-SP0",
+  "python": "CPython 3.10.18",
+  "startedAt": "2025-11-16T05:19:16.923746Z",
+  "args": [
+    "--log_to_wandb"
+  ],
+  "program": "D:\\OneDrive - Emory\\Emory CS\\Decision-transformer\\decision-transformer\\ipd\\experiment_ipd2.py",
+  "codePath": "decision-transformer\\ipd\\experiment_ipd2.py",
+  "codePathLocal": "experiment_ipd2.py",
+  "git": {
+    "remote": "https://github.com/kaneis1/Decision-transformer.git",
+    "commit": "36857b90e5ec4a6064e43e5e9f2d1bfcd1f1ea7a"
+  },
+  "email": "kanielquits@gmail.com",
+  "root": "D:\\OneDrive - Emory\\Emory CS\\Decision-transformer\\decision-transformer\\ipd",
+  "host": "Kaneis",
+  "executable": "C:\\Users\\kanie\\.conda\\envs\\decision-transformer-gym2\\python.exe",
+  "cpu_count": 8,
+  "cpu_count_logical": 16,
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "649178730496",
+      "used": "576762789888"
+    }
+  },
+  "memory": {
+    "total": "15885135872"
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "memoryTotal": "8546942976",
+      "cudaCores": 3328,
+      "architecture": "Blackwell",
+      "uuid": "GPU-9861f1dc-6849-3886-ebd4-8667cf017a97"
+    }
+  ],
+  "cudaVersion": "13.0",
+  "writerId": "b96pk04hy6yb0lsrjs0kdbmof2hxwl7k"
+}

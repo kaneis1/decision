@@ -1,0 +1,1 @@
+{"_wandb":{"runtime":2531},"_timestamp":1.763280704046494e+09,"training/action_error":0.09709028154611588,"time/total":2325.0576338768005,"time/evaluation":0,"time/training":165.25015997886658,"_runtime":2531,"validation/mse":0.0954962724725083,"_step":7,"training/train_loss_mean":0.09663726211823523,"training/train_loss_std":0.02289044984631597}
