@@ -1,0 +1,40 @@
+import torch
+
+from decision_transformer.training.trainer import Trainer
+
+
+class SequenceTrainer(Trainer):
+
+    def train_step(self):
+        # get_batch returns: s, a, r, d, mo, rtg, timesteps_t, mask_t
+        states, actions, rewards, dones, mos, rtg, timesteps, attention_mask = self.get_batch(self.batch_size)
+        action_target = torch.clone(actions)
+
+        # DecisionTransformer with MO support
+        state_preds, action_preds, reward_preds = self.model.forward(
+            states, actions, rewards, rtg[:,:-1], timesteps, attention_mask=attention_mask, mo=mos,
+        )
+
+        # DecisionTransformer: (B, T, act_dim) - predict action for each timestep
+        act_dim = action_preds.shape[2]
+        action_preds = action_preds.reshape(-1, act_dim)[attention_mask.reshape(-1) > 0]
+        action_target = action_target.reshape(-1, act_dim)[attention_mask.reshape(-1) > 0]
+
+        loss = self.loss_fn(
+            None, action_preds, None,
+            None, action_target, None,
+        )
+
+        self.optimizer.zero_grad()
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(self.model.parameters(), .25)
+        self.optimizer.step()
+
+        with torch.no_grad():
+            # Calculate accuracy as diagnostic metric (apply sigmoid and threshold at 0.5)
+            action_probs = torch.sigmoid(action_preds)
+            action_preds_binary = (action_probs >= 0.5).float()
+            accuracy = (action_preds_binary == action_target).float().mean().detach().cpu().item()
+            self.diagnostics['training/action_accuracy'] = accuracy
+
+        return loss.detach().cpu().item()

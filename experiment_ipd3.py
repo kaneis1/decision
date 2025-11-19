@@ -13,9 +13,10 @@ import pandas as pd
 import torch
 import wandb
 
-from decision_transformer.training.seq_trainer import SequenceTrainer
-from decision_transformer.models.decision_transformer import DecisionTransformer
-from decision_transformer.evaluation.evaluate_ipd_no_mo import evaluate_ipd_metrics
+from decision_transformer.training.seq_trainer3 import SequenceTrainer
+from decision_transformer.models.decision_transformer3 import DecisionTransformer
+from decision_transformer.evaluation.evaluate_ipd3 import evaluate_ipd_metrics_and_betas
+
 
 
 def discount_cumsum(x, gamma: float):
@@ -31,6 +32,13 @@ def discount_cumsum(x, gamma: float):
 # CSV -> Trajectories builder
 # -----------------------------
 
+STATE_COLS_DEFAULT = [
+    "risk", "error", "delta", "infin", "contin", "r1", "r2", "r", "s", "t", "p","my.decision1","other.decision1"
+]
+
+MODUS_OPERANDI_BASE_COLS = [
+    "r1","r2","risk","error","delta","r1*delta","r2*delta","infin","contin","delta*infin"
+]
 import numpy as np
 import pandas as pd
 
@@ -40,9 +48,9 @@ def load_ipd_csv_as_trajectories(csv_path: str, history_k: int = 1):
     
     Args:
         csv_path: Path to CSV file
-        history_k: Number of history decision columns to include in state (default: 1)
-                   When history_k=2, includes: my.decision1, other.decision1, 
-                   my.decision2, other.decision2
+        history_k: Number of history decision columns to include in MO (default: 1)
+                   When history_k=3, includes: my.decision1, other.decision1, 
+                   my.decision2, other.decision2, my.decision3, other.decision3
     """
     df = pd.read_csv(csv_path)
     df.columns = [c.lower() for c in df.columns]
@@ -50,14 +58,16 @@ def load_ipd_csv_as_trajectories(csv_path: str, history_k: int = 1):
     period_col = "period"
     action_col = "my.decision"
 
-    # Build state columns: base + decision history (NO payoffs)
-    state_cols = [
-        "risk", "error", "delta", "infin", "contin", "r1", "r2", "r", "s", "t", "p"
-    ]
-    # Add decision history columns
+    state_cols = STATE_COLS_DEFAULT
+    # Build MO columns dynamically based on history_k
+    modus_operandi_cols = MODUS_OPERANDI_BASE_COLS.copy()
     for k in range(1, history_k + 1):
-        state_cols.extend([f"my.decision{k}", f"other.decision{k}"])
+        modus_operandi_cols.extend([f"my.decision{k}", f"other.decision{k}"])
 
+    # Compute interaction terms that don't exist in the CSV
+    df["r1*delta"] = pd.to_numeric(df["r1"], errors="coerce").fillna(0.0) * pd.to_numeric(df["delta"], errors="coerce").fillna(0.0)
+    df["r2*delta"] = pd.to_numeric(df["r2"], errors="coerce").fillna(0.0) * pd.to_numeric(df["delta"], errors="coerce").fillna(0.0)
+    df["delta*infin"] = pd.to_numeric(df["delta"], errors="coerce").fillna(0.0) * pd.to_numeric(df["infin"], errors="coerce").fillna(0.0)
 
     groups = []
     start_idx = 0
@@ -82,6 +92,14 @@ def load_ipd_csv_as_trajectories(csv_path: str, history_k: int = 1):
                 ep[my_col] = ep[my_col].fillna(2)
             if other_col in ep.columns:
                 ep[other_col] = ep[other_col].fillna(2)
+        
+        # Compute interaction terms: error*other.decision{k}
+        error_vals = pd.to_numeric(ep["error"], errors="coerce").fillna(0.0)
+        for k in range(1, history_k + 1):
+            other_col = f"other.decision{k}"
+            if other_col in ep.columns:
+                ep[f"error*{other_col}"] = error_vals * pd.to_numeric(ep[other_col], errors="coerce").fillna(0.0)
+        
         state_vals = (
             ep[state_cols]
             .apply(pd.to_numeric, errors="coerce")
@@ -89,7 +107,23 @@ def load_ipd_csv_as_trajectories(csv_path: str, history_k: int = 1):
             .astype(float)
             .values
         )
-
+        
+        # Build MO columns: base + decision history + interaction terms
+        mo_cols = modus_operandi_cols.copy()
+        for k in range(1, history_k + 1):
+            mo_cols.append(f"error*other.decision{k}")
+        
+        modus_operandi_vals = (
+            ep[mo_cols]
+            .apply(pd.to_numeric, errors="coerce")
+            .fillna(0.0)
+            .astype(float)
+            .values
+        )
+        
+        # Sum all MO features into a single scalar per timestep
+        mo = modus_operandi_vals.sum(axis=1).astype(np.float32).reshape(-1, 1)  # (T, 1)
+        
         s = state_vals.astype(np.float32)
         a = ep[action_col].values.astype(np.float32).reshape(-1, 1)
         r = ep["my.payoff1"].fillna(0.0).values.astype(np.float32)
@@ -98,7 +132,7 @@ def load_ipd_csv_as_trajectories(csv_path: str, history_k: int = 1):
         terminals = np.zeros(T, dtype=np.int64)
         terminals[-1] = 1
 
-        trajectories.append(dict(observations=s, actions=a, rewards=r, terminals=terminals, lens=int(T)))
+        trajectories.append(dict(observations=s, actions=a, rewards=r, modus_operandi=mo, terminals=terminals, lens=int(T)))
         max_ep_len = max(max_ep_len, T)
 
     return trajectories, max_ep_len
@@ -165,9 +199,8 @@ def main(args):
         print(f"\n--- Fold {fold_idx + 1}/{num_folds} ---")
         print(f"Train trajectories: {len(train_inds)} | Val trajectories: {len(val_inds)}")
 
-        # Define structure state indices
-        # State structure: ["risk", "error", "delta", "infin", "contin", "r1", "r2", "r", "s", "t", "p", 
-        #                    "my.decision1", "other.decision1", "my.decision2", "other.decision2", ...]
+        # Define structure state indices based on STATE_COLS_DEFAULT order
+        # STATE_COLS_DEFAULT = ["risk", "error", "delta", "infin", "contin", "r1", "r2", "r", "s", "t", "p","my.decision1","other.decision1"]
         risk_idx = 0
         error_idx = 1
         delta_idx = 2
@@ -179,6 +212,10 @@ def main(args):
         train_states = np.concatenate([trajectories[int(i)]["observations"] for i in train_inds], axis=0)
         state_mean = train_states.mean(axis=0)
         state_std = train_states.std(axis=0) + 1e-6
+        train_modus_operandi = np.concatenate([trajectories[int(i)]["modus_operandi"] for i in train_inds], axis=0)
+        # MO is now a scalar, so we need to compute mean and std over the scalar values
+        modus_operandi_mean = train_modus_operandi.mean(axis=0)  # (1,)
+        modus_operandi_std = train_modus_operandi.std(axis=0) + 1e-6  # (1,)
         
         # Create validation trajectories list
         val_trajs = [trajectories[int(i)] for i in val_inds]
@@ -186,6 +223,7 @@ def main(args):
         p_sample = train_traj_lens / train_traj_lens.sum()
 
         state_dim = train_states.shape[1]
+        modus_operandi_dim = 1  # MO is now a scalar
         act_dim = 1
         scale = max(1.0, np.percentile(train_returns, 95))
 
@@ -198,21 +236,26 @@ def main(args):
             a_i = traj["actions"][start_idx:start_idx + max_len]
             r_i = traj["rewards"][start_idx:start_idx + max_len]
             d_i = traj["terminals"][start_idx:start_idx + max_len]
-
+            mo_i = traj["modus_operandi"][start_idx:start_idx + max_len]  # (tlen, 1)
             ts = np.arange(start_idx, start_idx + s_i.shape[0], dtype=np.int64)
             ts[ts >= max_ep_len] = max_ep_len - 1
 
-            rtg_i = discount_cumsum(traj["rewards"][start_idx:], gamma=1.0)[: s_i.shape[0] + 1]
-            if rtg_i.shape[0] <= s_i.shape[0]:
-                rtg_i = np.concatenate([rtg_i, np.zeros((1,), dtype=np.float32)], axis=0)
-
             tlen = s_i.shape[0]
+            
+            # Calculate RTG for DT
+            rtg_i = discount_cumsum(traj["rewards"][start_idx:], gamma=1.0)[: tlen + 1]
+            if rtg_i.shape[0] < tlen + 1:
+                rtg_i = np.concatenate([rtg_i, np.zeros((tlen + 1 - rtg_i.shape[0],), dtype=np.float32)], axis=0)
+            # Ensure RTG has exactly max_len + 1 elements
+            if rtg_i.shape[0] > max_len + 1:
+                rtg_i = rtg_i[:max_len + 1]
 
             s_pad = np.zeros((max_len - tlen, state_dim), dtype=np.float32)
             a_pad = np.ones((max_len - tlen, act_dim), dtype=np.float32) * -10.0
             r_pad = np.zeros((max_len - tlen, 1), dtype=np.float32)
             d_pad = np.ones((max_len - tlen,), dtype=np.int64) * 2
-            rtg_pad = np.zeros((max_len - tlen, 1), dtype=np.float32)
+            mo_pad = np.zeros((max_len - tlen, 1), dtype=np.float32)  # MO is scalar
+            rtg_pad = np.zeros((max_len + 1 - rtg_i.shape[0],), dtype=np.float32)  # Pad RTG to max_len + 1
             ts_pad = np.zeros((max_len - tlen,), dtype=np.int64)
 
             s_i = np.concatenate([s_pad, s_i], axis=0).astype(np.float32)
@@ -220,13 +263,17 @@ def main(args):
             a_i = np.concatenate([a_pad, a_i], axis=0).astype(np.float32)
             r_i = np.concatenate([r_pad, r_i.reshape(-1, 1)], axis=0).astype(np.float32)
             d_i = np.concatenate([d_pad, d_i], axis=0).astype(np.int64)
-            rtg_i = np.concatenate([rtg_pad, rtg_i.reshape(-1, 1)], axis=0).astype(np.float32) / float(scale)
+            mo_i = np.concatenate([mo_pad, mo_i], axis=0).astype(np.float32)
+            mo_i = (mo_i - modus_operandi_mean) / modus_operandi_std
+            # RTG should be padded to max_len + 1 total length
+            rtg_i = np.concatenate([rtg_pad, rtg_i], axis=0).astype(np.float32) / float(scale)
+            rtg_i = rtg_i.reshape(-1, 1)  # Reshape to (max_len + 1, 1)
             ts = np.concatenate([ts_pad, ts], axis=0).astype(np.int64)
             mask = np.concatenate(
                 [np.zeros((max_len - tlen,)), np.ones((tlen,))], axis=0
             ).astype(np.float32)
 
-            return s_i, a_i, r_i, d_i, rtg_i, ts, mask
+            return s_i, a_i, r_i, d_i, mo_i, rtg_i, ts, mask
 
         def get_batch(batch_size=args.batch_size, max_len=max_len):
             batch_inds = np.random.choice(
@@ -236,16 +283,17 @@ def main(args):
                 p=p_sample,
             )
 
-            s, a, r, d, rtg, timesteps, mask = [], [], [], [], [], [], []
+            s, a, r, d, mo, rtg, timesteps, mask = [], [], [], [], [], [], [], []
             for i in range(batch_size):
                 traj = trajectories[int(train_inds[batch_inds[i]])]
                 si = random.randint(0, traj["rewards"].shape[0] - 1)
-                s_i, a_i, r_i, d_i, rtg_i, ts, m = make_padded_sample(traj, si)
+                s_i, a_i, r_i, d_i, mo_i, rtg_i, ts, m = make_padded_sample(traj, si)
 
                 s.append(s_i[None])
                 a.append(a_i[None])
                 r.append(r_i[None])
                 d.append(d_i[None])
+                mo.append(mo_i[None])
                 rtg.append(rtg_i[None])
                 timesteps.append(ts[None])
                 mask.append(m[None])
@@ -254,15 +302,17 @@ def main(args):
             a = torch.from_numpy(np.concatenate(a, axis=0)).to(dtype=torch.float32, device=device)
             r = torch.from_numpy(np.concatenate(r, axis=0)).to(dtype=torch.float32, device=device)
             d = torch.from_numpy(np.concatenate(d, axis=0)).to(dtype=torch.long, device=device)
+            mo = torch.from_numpy(np.concatenate(mo, axis=0)).to(dtype=torch.float32, device=device)
             rtg = torch.from_numpy(np.concatenate(rtg, axis=0)).to(dtype=torch.float32, device=device)
             timesteps_t = torch.from_numpy(np.concatenate(timesteps, axis=0)).to(dtype=torch.long, device=device)
             mask_t = torch.from_numpy(np.concatenate(mask, axis=0)).to(device=device)
 
-            return s, a, r, d, rtg, timesteps_t, mask_t
+            return s, a, r, d, mo, rtg, timesteps_t, mask_t
 
         model = DecisionTransformer(
             state_dim=state_dim,
             act_dim=act_dim,
+            mo_dim=1,  # MO is now a scalar
             max_length=K,
             max_ep_len=max_ep_len,
             hidden_size=args.embed_dim,
@@ -326,23 +376,23 @@ def main(args):
                     T = traj["rewards"].shape[0]
 
                     for si in range(T):
-                        s_i, a_i, r_i, d_i, rtg_i, ts, m = make_padded_sample(traj, si)
+                        s_i, a_i, r_i, d_i, mo_i, rtg_i, ts, m = make_padded_sample(traj, si)
 
                         s_batch = torch.from_numpy(s_i[None]).to(dtype=torch.float32, device=device)
                         a_batch = torch.from_numpy(a_i[None]).to(dtype=torch.float32, device=device)
                         r_batch = torch.from_numpy(r_i[None]).to(dtype=torch.float32, device=device)
+                        mo_batch = torch.from_numpy(mo_i[None]).to(dtype=torch.float32, device=device)
                         rtg_batch = torch.from_numpy(rtg_i[None]).to(dtype=torch.float32, device=device)
                         ts_batch = torch.from_numpy(ts[None]).to(dtype=torch.long, device=device)
                         mask_batch = torch.from_numpy(m[None]).to(dtype=torch.float32, device=device)
 
+                        # DecisionTransformer with MO support
                         _, action_preds, _ = model.forward(
-                            s_batch,
-                            a_batch,
-                            r_batch,
-                            rtg_batch[:, :-1],
-                            ts_batch,
-                            attention_mask=mask_batch,
+                            s_batch, a_batch, r_batch, rtg_batch[:, :-1], ts_batch,
+                            attention_mask=mask_batch, mo=mo_batch,
                         )
+
+                        # DecisionTransformer: (B, T, act_dim)
                         act_dim_eval = action_preds.shape[2]
                         action_preds = action_preds.reshape(-1, act_dim_eval)
                         action_target = a_batch.reshape(-1, act_dim_eval)
@@ -404,14 +454,17 @@ def main(args):
         print("\n" + "=" * 70)
         print(f"Evaluating IPD metrics for Fold {fold_idx + 1}/{num_folds}")
         print("=" * 70)
-        metrics = evaluate_ipd_metrics(
-            model=model,
+        metrics = evaluate_ipd_metrics_and_betas(
+            model,
             trajectories=val_trajs,
             K=args.K,
             max_ep_len=max_ep_len,
             device=device,
             state_mean=state_mean,
             state_std=state_std,
+            mo_mean=modus_operandi_mean,
+            mo_std=modus_operandi_std,
+            history_k=args.history_k,  # Pass history_k to generate correct feature names
             structure_state_idx=(risk_idx, error_idx, delta_idx, infinity_idx, continuous_idx),
             print_report=True,
         )
@@ -465,14 +518,18 @@ def main(args):
         print("Evaluating on Test Set (10% held-out)")
         print("=" * 70)
         
-        # Use the model from the last fold for test evaluation
+        # Use the model from the last fold (or best fold) for test evaluation
+        # For simplicity, we'll use the last fold's model
         test_model = trained_models[-1]
         test_trajs = [trajectories[int(i)] for i in test_inds]
         
         # Calculate normalization stats from all CV data
         all_cv_states = np.concatenate([trajectories[int(i)]["observations"] for i in cv_inds], axis=0)
+        all_cv_mo = np.concatenate([trajectories[int(i)]["modus_operandi"] for i in cv_inds], axis=0)
         test_state_mean = all_cv_states.mean(axis=0)
         test_state_std = all_cv_states.std(axis=0) + 1e-6
+        test_mo_mean = all_cv_mo.mean(axis=0)
+        test_mo_std = all_cv_mo.std(axis=0) + 1e-6
         
         # Define structure state indices
         risk_idx = 0
@@ -481,14 +538,17 @@ def main(args):
         infinity_idx = 3
         continuous_idx = 4
         
-        test_metrics = evaluate_ipd_metrics(
-            model=test_model,
+        test_metrics = evaluate_ipd_metrics_and_betas(
+            test_model,
             trajectories=test_trajs,
             K=args.K,
             max_ep_len=max_ep_len,
             device=device,
             state_mean=test_state_mean,
             state_std=test_state_std,
+            mo_mean=test_mo_mean,
+            mo_std=test_mo_std,
+            history_k=args.history_k,
             structure_state_idx=(risk_idx, error_idx, delta_idx, infinity_idx, continuous_idx),
             print_report=True,
         )
@@ -513,7 +573,6 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--csv_path", type=str, default="decision/data/all_data.csv")
-    parser.add_argument("--history_k", type=int, default=3, help="Number of history decision columns to include in state (default: 1). When history_k=2, includes my.decision1-2 and other.decision1-2")
     parser.add_argument("--K", type=int, default=40)
     parser.add_argument("--batch_size", type=int, default=128)
     parser.add_argument("--embed_dim", type=int, default=256)
@@ -533,5 +592,7 @@ if __name__ == "__main__":
     parser.add_argument("--fold_index", type=int, default=0)
     parser.add_argument("--fold_seed", type=int, default=0)
     parser.add_argument("--run_all_folds", action="store_true", default=True)
+    parser.add_argument("--history_k", type=int, default=3, help="Number of history decision columns to include in MO (default: 3). When history_k=2, includes my.decision1-2, other.decision1-2, and error*other.decision1-2")
     args = parser.parse_args()
+    # Expand ~ in csv_path to home directory
     main(args)

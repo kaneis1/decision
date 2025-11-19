@@ -16,8 +16,6 @@ import wandb
 from decision_transformer.training.seq_trainer2 import SequenceTrainer
 from decision_transformer.models.decision_transformer2 import DecisionTransformer
 from decision_transformer.evaluation.evaluate_ipd import evaluate_ipd_metrics_and_betas
-from decision_transformer.evaluation.evaluate_mo_formula import evaluate_mo_formula
-from decision_transformer.models.gpt2_bc import GPT2BCModel
 
 
 def discount_cumsum(x, gamma: float):
@@ -152,18 +150,33 @@ def main(args):
 
     num_folds = args.num_folds
 
+    # Split data: 90% for 5-fold CV, 10% for test
     rng = np.random.default_rng(args.fold_seed)
     perm = rng.permutation(total_trajs)
-    fold_sizes = np.full(num_folds, total_trajs // num_folds, dtype=int)
-    fold_sizes[: total_trajs % num_folds] += 1
+    
+    # Calculate split point: 90% for CV, 10% for test
+    cv_size = int(total_trajs * 0.9)
+    test_size = total_trajs - cv_size
+    
+    cv_inds = perm[:cv_size]  # 90% for cross-validation
+    test_inds = perm[cv_size:]  # 10% for test set
+    
+    print("=" * 50)
+    print(f"Data split: {len(cv_inds)} trajectories (90%) for {num_folds}-fold CV")
+    print(f"            {len(test_inds)} trajectories (10%) for test set")
+    print("=" * 50)
+    
+    # Create folds from CV data (90%)
+    fold_sizes = np.full(num_folds, cv_size // num_folds, dtype=int)
+    fold_sizes[: cv_size % num_folds] += 1
     folds, start = [], 0
     for size in fold_sizes:
-        folds.append(perm[start : start + size])
+        folds.append(cv_inds[start : start + size])
         start += size
 
     fold_val_accuracies: list[float] = []
 
-    def train_single_fold(fold_idx: int, train_inds: np.ndarray, val_inds: np.ndarray) -> float | None:
+    def train_single_fold(fold_idx: int, train_inds: np.ndarray, val_inds: np.ndarray) -> tuple[float | None, object]:
         
         print(f"\n--- Fold {fold_idx + 1}/{num_folds} ---")
         print(f"Train trajectories: {len(train_inds)} | Val trajectories: {len(val_inds)}")
@@ -196,49 +209,27 @@ def main(args):
         scale = max(1.0, np.percentile(train_returns, 95))
 
         K = args.K
-        # For GPT2, use history_k as the sequence length; for DT, use K
-        if args.model_type == "gpt2":
-            max_len = args.history_k
-        else:
-            max_len = K
+        max_len = K
         num_traj_keep = train_inds.shape[0]
 
         def make_padded_sample(traj, start_idx: int):
-            # For GPT2, we want the last history_k states (decision history)
-            # For DT, we want a window of K states
-            if args.model_type == "gpt2":
-                # Get the last history_k states ending at start_idx
-                actual_start = max(0, start_idx - args.history_k + 1)
-                s_i = traj["observations"][actual_start:start_idx + 1]
-                a_i = traj["actions"][actual_start:start_idx + 1]
-                r_i = traj["rewards"][actual_start:start_idx + 1]
-                d_i = traj["terminals"][actual_start:start_idx + 1]
-                mo_i = traj["modus_operandi"][actual_start:start_idx + 1]
-                # For GPT2, timesteps are relative to the window (0 to history_k-1)
-                ts = np.arange(s_i.shape[0], dtype=np.int64)
-            else:
-                s_i = traj["observations"][start_idx:start_idx + max_len]
-                a_i = traj["actions"][start_idx:start_idx + max_len]
-                r_i = traj["rewards"][start_idx:start_idx + max_len]
-                d_i = traj["terminals"][start_idx:start_idx + max_len]
-                mo_i = traj["modus_operandi"][start_idx:start_idx + max_len]
-                ts = np.arange(start_idx, start_idx + s_i.shape[0], dtype=np.int64)
-                ts[ts >= max_ep_len] = max_ep_len - 1
+            s_i = traj["observations"][start_idx:start_idx + max_len]
+            a_i = traj["actions"][start_idx:start_idx + max_len]
+            r_i = traj["rewards"][start_idx:start_idx + max_len]
+            d_i = traj["terminals"][start_idx:start_idx + max_len]
+            mo_i = traj["modus_operandi"][start_idx:start_idx + max_len]
+            ts = np.arange(start_idx, start_idx + s_i.shape[0], dtype=np.int64)
+            ts[ts >= max_ep_len] = max_ep_len - 1
 
             tlen = s_i.shape[0]
             
-            # Calculate RTG: for GPT2, we use a dummy RTG since it's not used
-            # For DT, calculate proper RTG from start_idx onwards
-            if args.model_type == "gpt2":
-                # GPT2 doesn't use RTG, so create dummy RTG of correct length
-                rtg_i = np.zeros((max_len + 1,), dtype=np.float32)
-            else:
-                rtg_i = discount_cumsum(traj["rewards"][start_idx:], gamma=1.0)[: tlen + 1]
-                if rtg_i.shape[0] < tlen + 1:
-                    rtg_i = np.concatenate([rtg_i, np.zeros((tlen + 1 - rtg_i.shape[0],), dtype=np.float32)], axis=0)
-                # Ensure RTG has exactly max_len + 1 elements
-                if rtg_i.shape[0] > max_len + 1:
-                    rtg_i = rtg_i[:max_len + 1]
+            # Calculate RTG for DT
+            rtg_i = discount_cumsum(traj["rewards"][start_idx:], gamma=1.0)[: tlen + 1]
+            if rtg_i.shape[0] < tlen + 1:
+                rtg_i = np.concatenate([rtg_i, np.zeros((tlen + 1 - rtg_i.shape[0],), dtype=np.float32)], axis=0)
+            # Ensure RTG has exactly max_len + 1 elements
+            if rtg_i.shape[0] > max_len + 1:
+                rtg_i = rtg_i[:max_len + 1]
 
             s_pad = np.zeros((max_len - tlen, state_dim), dtype=np.float32)
             a_pad = np.ones((max_len - tlen, act_dim), dtype=np.float32) * -10.0
@@ -299,37 +290,22 @@ def main(args):
 
             return s, a, r, d, mo, rtg, timesteps_t, mask_t
 
-        if args.model_type == "dt":
-            model = DecisionTransformer(
-                state_dim=state_dim,
-                act_dim=act_dim,
-                mo_dim=modus_operandi_dim,
-                max_length=K,
-                max_ep_len=max_ep_len,
-                hidden_size=args.embed_dim,
-                n_layer=args.n_layer,
-                n_head=args.n_head,
-                n_inner=4 * args.embed_dim,
-                activation_function=args.activation_function,
-                n_positions=1024,
-                resid_pdrop=args.dropout,
-                attn_pdrop=args.dropout,
-                action_tanh=False,  # Output raw logits for BCEWithLogitsLoss
-            )
-        elif args.model_type == "gpt2":
-            model = GPT2BCModel(
-                state_dim=state_dim,
-                act_dim=act_dim,
-                hidden_size=args.embed_dim,
-                n_layer=args.n_layer,
-                n_head=args.n_head,
-                max_length=args.history_k,
-                dropout=args.dropout,
-                action_tanh=False,  # Output raw logits for BCEWithLogitsLoss
-                max_ep_len=max_ep_len,  # For timestep embeddings
-            )
-        else:
-            raise ValueError(f"Unknown model_type: {args.model_type}. Must be 'dt' or 'gpt2'")
+        model = DecisionTransformer(
+            state_dim=state_dim,
+            act_dim=act_dim,
+            mo_dim=modus_operandi_dim,
+            max_length=K,
+            max_ep_len=max_ep_len,
+            hidden_size=args.embed_dim,
+            n_layer=args.n_layer,
+            n_head=args.n_head,
+            n_inner=4 * args.embed_dim,
+            activation_function=args.activation_function,
+            n_positions=1024,
+            resid_pdrop=args.dropout,
+            attn_pdrop=args.dropout,
+            action_tanh=False,  # Output raw logits for BCEWithLogitsLoss
+        )
         model = model.to(device=device)
 
         optimizer = torch.optim.AdamW(
@@ -375,11 +351,6 @@ def main(args):
             total_correct = 0
             total_count = 0
 
-            # Check model forward signature to handle both DT and GPT2 models
-            import inspect
-            forward_sig = inspect.signature(model.forward)
-            forward_params = list(forward_sig.parameters.keys())
-
             with torch.no_grad():
                 for idx in val_inds:
                     traj = trajectories[int(idx)]
@@ -396,43 +367,19 @@ def main(args):
                         ts_batch = torch.from_numpy(ts[None]).to(dtype=torch.long, device=device)
                         mask_batch = torch.from_numpy(m[None]).to(dtype=torch.float32, device=device)
 
-                        # Call model.forward with appropriate arguments based on model type
-                        if 'mo' in forward_params:
-                            # DecisionTransformer with MO support
-                            _, action_preds, _ = model.forward(
-                                s_batch, a_batch, r_batch, rtg_batch[:, :-1], ts_batch,
-                                attention_mask=mask_batch, mo=mo_batch,
-                            )
-                        elif 'returns_to_go' not in forward_params:
-                            # GPT2BCModel: forward(states, actions, rewards, timesteps=None, attention_mask=None, target_return=None)
-                            # Note: timesteps is positional with default, so we need to pass it explicitly as keyword arg
-                            _, action_preds, _ = model.forward(
-                                s_batch, a_batch, r_batch, timesteps=ts_batch, attention_mask=mask_batch,
-                            )
-                        else:
-                            # DecisionTransformer without MO
-                            _, action_preds, _ = model.forward(
-                                s_batch, a_batch, r_batch, rtg_batch[:, :-1], ts_batch,
-                                attention_mask=mask_batch,
-                            )
+                        # DecisionTransformer with MO support
+                        _, action_preds, _ = model.forward(
+                            s_batch, a_batch, r_batch, rtg_batch[:, :-1], ts_batch,
+                            attention_mask=mask_batch, mo=mo_batch,
+                        )
 
-                        # Handle different output shapes: DT returns (B, T, act_dim), GPT2 returns (B, 1, act_dim)
-                        if action_preds.shape[1] == 1:
-                            # GPT2BCModel: (B, 1, act_dim)
-                            act_dim_eval = action_preds.shape[2]
-                            action_preds = action_preds.reshape(-1, act_dim_eval)  # (B, act_dim)
-                            # Get the last valid action from the sequence as target
-                            mask_bool = mask_batch.bool()  # (B, T)
-                            last_valid_indices = (mask_bool.sum(dim=1) - 1).clamp(min=0)  # (B,)
-                            action_target = a_batch[torch.arange(a_batch.shape[0], device=a_batch.device), last_valid_indices]  # (B, act_dim)
-                        else:
-                            # DecisionTransformer: (B, T, act_dim)
-                            act_dim_eval = action_preds.shape[2]
-                            action_preds = action_preds.reshape(-1, act_dim_eval)
-                            action_target = a_batch.reshape(-1, act_dim_eval)
-                            mask_flat = mask_batch.reshape(-1).bool()
-                            action_preds = action_preds[mask_flat]
-                            action_target = action_target[mask_flat]
+                        # DecisionTransformer: (B, T, act_dim)
+                        act_dim_eval = action_preds.shape[2]
+                        action_preds = action_preds.reshape(-1, act_dim_eval)
+                        action_target = a_batch.reshape(-1, act_dim_eval)
+                        mask_flat = mask_batch.reshape(-1).bool()
+                        action_preds = action_preds[mask_flat]
+                        action_target = action_target[mask_flat]
 
                         if action_preds.shape[0] == 0:
                             continue
@@ -536,73 +483,103 @@ def main(args):
         
         if wandb_run is not None:
             wandb.log({f"ipd/{k}": v for k, v in metrics.items()})
-        
-        # Evaluate original MO formula for comparison
-        print("\n" + "=" * 70)
-        print(f"Evaluating Original MO Formula for Fold {fold_idx + 1}/{num_folds}")
-        print("=" * 70)
-        mo_formula_metrics = evaluate_mo_formula(
-            trajectories=val_trajs,
-            K=args.K,
-            max_ep_len=max_ep_len,
-            structure_state_idx=(risk_idx, error_idx, delta_idx, infinity_idx, continuous_idx),
-            print_report=True,
-        )
-        
-        # Print comparison table
-        model_name = "GPT2" if args.model_type == "gpt2" else "DT Model"
-        print("\n" + "=" * 70)
-        print(f"Fold {fold_idx + 1}/{num_folds} - Model Comparison")
-        print("=" * 70)
-        print(f"{'Metric':<15} {model_name:>15} {'MO Formula':>15}")
-        print("-" * 70)
-        print(f"{'Acc. t = 1':<15} {metrics['Acc.t=1']:>15.3f} {mo_formula_metrics['Acc.t=1']:>15.3f}")
-        print(f"{'Acc. t > 1':<15} {metrics['Acc.t>1']:>15.3f} {mo_formula_metrics['Acc.t>1']:>15.3f}")
-        print(f"{'LL t = 1':<15} {metrics['LL.t=1']:>15.0f} {mo_formula_metrics['LL.t=1']:>15.0f}")
-        print(f"{'LL t > 1':<15} {metrics['LL.t>1']:>15.0f} {mo_formula_metrics['LL.t>1']:>15.0f}")
-        print(f"{'Cor-Time':<15} {metrics['Cor-Time']:>15.3f} {mo_formula_metrics['Cor-Time']:>15.3f}")
-        print(f"{'Cor-Avg.':<15} {metrics['Cor-Avg']:>15.3f} {mo_formula_metrics['Cor-Avg']:>15.3f}")
-        print(f"{'RMSE-Time':<15} {metrics['RMSE-Time']:>15.3f} {mo_formula_metrics['RMSE-Time']:>15.3f}")
-        print(f"{'RMSE-Avg.':<15} {metrics['RMSE-Avg']:>15.3f} {mo_formula_metrics['RMSE-Avg']:>15.3f}")
-        print("=" * 70 + "\n")
-        
-        if wandb_run is not None:
-            wandb.log({f"mo_formula/{k}": v for k, v in mo_formula_metrics.items()})
 
         if wandb_run is not None:
             wandb.finish()
 
-        return last_val_accuracy
+        return last_val_accuracy, model
 
+    # Store models from each fold for test evaluation
+    trained_models = []
+    
     for fold_idx in range(num_folds):
         val_inds = folds[fold_idx]
         train_inds = np.concatenate([folds[i] for i in range(num_folds) if i != fold_idx])
 
-        val_accuracy = train_single_fold(fold_idx, train_inds, val_inds)
+        val_accuracy, model = train_single_fold(fold_idx, train_inds, val_inds)
         if val_accuracy is not None:
             fold_val_accuracies.append(val_accuracy)
+        if model is not None:
+            trained_models.append(model)
 
     if fold_val_accuracies:
         avg_val_accuracy = float(np.mean(fold_val_accuracies))
         print("\n" + "=" * 50)
         print(f"Average validation Accuracy over {len(fold_val_accuracies)} fold(s): {avg_val_accuracy:.6f}")
         print("=" * 50)
+    
+    # Evaluate on test set (10%)
+    if len(test_inds) > 0 and len(trained_models) > 0:
+        print("\n" + "=" * 70)
+        print("Evaluating on Test Set (10% held-out)")
+        print("=" * 70)
+        
+        # Use the model from the last fold (or best fold) for test evaluation
+        # For simplicity, we'll use the last fold's model
+        test_model = trained_models[-1]
+        test_trajs = [trajectories[int(i)] for i in test_inds]
+        
+        # Calculate normalization stats from all CV data
+        all_cv_states = np.concatenate([trajectories[int(i)]["observations"] for i in cv_inds], axis=0)
+        all_cv_mo = np.concatenate([trajectories[int(i)]["modus_operandi"] for i in cv_inds], axis=0)
+        test_state_mean = all_cv_states.mean(axis=0)
+        test_state_std = all_cv_states.std(axis=0) + 1e-6
+        test_mo_mean = all_cv_mo.mean(axis=0)
+        test_mo_std = all_cv_mo.std(axis=0) + 1e-6
+        
+        # Define structure state indices
+        risk_idx = 0
+        error_idx = 1
+        delta_idx = 2
+        infinity_idx = 3
+        continuous_idx = 4
+        
+        test_metrics = evaluate_ipd_metrics_and_betas(
+            test_model,
+            trajectories=test_trajs,
+            K=args.K,
+            max_ep_len=max_ep_len,
+            device=device,
+            state_mean=test_state_mean,
+            state_std=test_state_std,
+            mo_mean=test_mo_mean,
+            mo_std=test_mo_std,
+            history_k=args.history_k,
+            structure_state_idx=(risk_idx, error_idx, delta_idx, infinity_idx, continuous_idx),
+            print_report=True,
+        )
+        
+        # Print test set results
+        print("\n" + "=" * 70)
+        print("Test Set (10% held-out) - Performance Metrics")
+        print("=" * 70)
+        print(f"{'Metric':<15} {'Value':>10}")
+        print("-" * 70)
+        print(f"{'Acc. t = 1':<15} {test_metrics['Acc.t=1']:>10.3f}")
+        print(f"{'Acc. t > 1':<15} {test_metrics['Acc.t>1']:>10.3f}")
+        print(f"{'LL t = 1':<15} {test_metrics['LL.t=1']:>10.0f}")
+        print(f"{'LL t > 1':<15} {test_metrics['LL.t>1']:>10.0f}")
+        print(f"{'Cor-Time':<15} {test_metrics['Cor-Time']:>10.3f}")
+        print(f"{'Cor-Avg.':<15} {test_metrics['Cor-Avg']:>10.3f}")
+        print(f"{'RMSE-Time':<15} {test_metrics['RMSE-Time']:>10.3f}")
+        print(f"{'RMSE-Avg.':<15} {test_metrics['RMSE-Avg']:>10.3f}")
+        print("=" * 70)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--csv_path", type=str, default="data/all_data.csv")
+    parser.add_argument("--csv_path", type=str, default="decision/data/all_data.csv")
     parser.add_argument("--K", type=int, default=40)
-    parser.add_argument("--batch_size", type=int, default=32)
-    parser.add_argument("--embed_dim", type=int, default=64)
-    parser.add_argument("--n_layer", type=int, default=1)
-    parser.add_argument("--n_head", type=int, default=1)
+    parser.add_argument("--batch_size", type=int, default=128)
+    parser.add_argument("--embed_dim", type=int, default=256)
+    parser.add_argument("--n_layer", type=int, default=4)
+    parser.add_argument("--n_head", type=int, default=4)
     parser.add_argument("--activation_function", type=str, default="relu")
     parser.add_argument("--dropout", type=float, default=0.1)
     parser.add_argument("--learning_rate", "-lr", type=float, default=1e-4)
     parser.add_argument("--weight_decay", "-wd", type=float, default=1e-4)
     parser.add_argument("--warmup_steps", type=int, default=100)
-    parser.add_argument("--max_iters", type=int, default=10)
+    parser.add_argument("--max_iters", type=int, default=30)
     parser.add_argument("--num_steps_per_iter", type=int, default=10000)
     parser.add_argument("--device", type=str, default="cuda")
     parser.add_argument("--log_to_wandb", action="store_true")
@@ -611,7 +588,7 @@ if __name__ == "__main__":
     parser.add_argument("--fold_index", type=int, default=0)
     parser.add_argument("--fold_seed", type=int, default=0)
     parser.add_argument("--run_all_folds", action="store_true", default=True)
-    parser.add_argument("--model_type", type=str, default="dt", choices=["dt", "gpt2"], help="Model type: 'dt' for DecisionTransformer or 'gpt2' for GPT2BCModel")
-    parser.add_argument("--history_k", type=int, default=1, help="Number of history decision columns to include in MO (default: 1). When history_k=3, includes my.decision1-3 and other.decision1-3")
+    parser.add_argument("--history_k", type=int, default=3, help="Number of history decision columns to include in MO (default: 3). When history_k=3, includes my.decision1-3 and other.decision1-3")
     args = parser.parse_args()
+    # Expand ~ in csv_path to home directory
     main(args)
