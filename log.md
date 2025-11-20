@@ -47,6 +47,44 @@ Average validation MSE over 5 fold(s): 0.133717
 I am updating model to have 4 modality and the model will be R1,s1,MO1,A1,R2,S2,MO2,A2.... etc
 this is more like a human thinking way like we meet a question, and we saw reward we get first, then we see state and with states we can think about a strategy, at last we move.
 
+bert_model:
+======================================================================
+BERT IPD Eval → Acc.t=1 0.842, Acc.t>1 0.926, LL.t=1 -4357, LL.t>1 -3932, Cor-Time 0.967, RMSE-Time 0.060, Cor-Avg 0.000, RMSE-Avg 0.000
+
+======================================================================
+Test Set (10% held-out) - Performance Metrics
+======================================================================
+Metric               Value
+----------------------------------------------------------------------
+Acc. t = 1           0.842
+Acc. t > 1           0.926
+LL t = 1             -4357
+LL t > 1             -3932
+Cor-Time             0.967
+Cor-Avg.             0.000
+RMSE-Time            0.060
+RMSE-Avg.            0.000
+======================================================================
+
+gpt2_model:
+======================================================================
+GPT2 IPD Eval → Acc.t=1 0.726, Acc.t>1 0.871, LL.t=1 -1836, LL.t>1 -4299, Cor-Time 0.883, RMSE-Time 0.097, Cor-Avg 0.000, RMSE-Avg 0.000
+
+======================================================================
+Test Set (10% held-out) - Performance Metrics
+======================================================================
+Metric               Value
+----------------------------------------------------------------------
+Acc. t = 1           0.726
+Acc. t > 1           0.871
+LL t = 1             -1836
+LL t > 1             -4299
+Cor-Time             0.883
+Cor-Avg.             0.000
+RMSE-Time            0.097
+RMSE-Avg.            0.000
+======================================================================
+
 idea
 
 -- use Shap to weight different features

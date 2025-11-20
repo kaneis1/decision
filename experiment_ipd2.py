@@ -410,11 +410,13 @@ def main(args):
             wandb.login(key=wandb_api_key, relogin=True)
             group_name = "ipd-csv"
             run_name = f"{group_name}-fold{fold_idx}-{random.randint(int(1e5), int(1e6) - 1)}"
+            wandb_dir = os.path.join(os.path.dirname(__file__), "wandb")
             wandb_run = wandb.init(
                 name=run_name,
                 group=group_name,
                 project="decision-transformer",
                 config=vars(args) | {"fold_index": fold_idx},
+                dir=wandb_dir,
             )
 
         last_val_accuracy = None
@@ -565,6 +567,25 @@ def main(args):
         print(f"{'RMSE-Avg.':<15} {test_metrics['RMSE-Avg']:>10.3f}")
         print("=" * 70)
 
+        # Log test metrics to wandb (create a new run for test results)
+        if args.log_to_wandb:
+            wandb_api_key = args.wandb_api_key or os.environ.get("WANDB_API_KEY")
+            if wandb_api_key:
+                os.environ["WANDB_API_KEY"] = wandb_api_key
+                wandb.login(key=wandb_api_key, relogin=True)
+                group_name = "ipd-dt2"
+                test_run_name = f"{group_name}-test-{random.randint(int(1e5), int(1e6) - 1)}"
+                wandb_dir = os.path.dirname(__file__)
+                test_wandb_run = wandb.init(
+                    name=test_run_name,
+                    group=group_name,
+                    project="decision-transformer",
+                    config=vars(args) | {"test_evaluation": True},
+                    dir=wandb_dir,
+                )
+                # Log test metrics with "test/" prefix
+                wandb.log({f"test/ipd/{k}": v for k, v in test_metrics.items()})
+                wandb.finish()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
