@@ -1,0 +1,7 @@
+{"time":"2025-11-19T03:07:44.346417568-05:00","level":"INFO","msg":"main: starting server","port-filename":"/tmp/tmp2v1rnv6y/port-826649.txt","pid":826649,"log-level":0,"disable-analytics":false,"shutdown-on-parent-exit":false,"enable-dcgm-profiling":false}
+{"time":"2025-11-19T03:07:44.346899329-05:00","level":"INFO","msg":"server: accepting connections","addr":{"Name":"/tmp/wandb-826649-827436-3821698199/socket","Net":"unix"}}
+{"time":"2025-11-19T03:07:44.347093499-05:00","level":"INFO","msg":"server: will exit if parent process dies","ppid":826649}
+{"time":"2025-11-19T03:07:44.435462217-05:00","level":"INFO","msg":"connection: ManageConnectionData: new connection created","id":"1(@)"}
+{"time":"2025-11-19T03:07:44.484814697-05:00","level":"INFO","msg":"handleInformInit: received","streamId":"zsemgay9","id":"1(@)"}
+{"time":"2025-11-19T03:07:44.700833583-05:00","level":"INFO","msg":"handleInformInit: stream started","streamId":"zsemgay9","id":"1(@)"}
+{"time":"2025-11-19T03:07:48.346098901-05:00","level":"INFO","msg":"server: parent process exited, terminating service process"}

@@ -1,0 +1,318 @@
+>>> Fold 3 | Iteration 1/30
+================================================================================
+Iteration 1
+time/training: 261.2004699707031
+time/total: 261.40242099761963
+time/evaluation: 0.0002238750457763672
+training/train_loss_mean: 0.3120831190943718
+training/train_loss_std: 0.03931517766876781
+training/action_accuracy: 0.8531810641288757
+Validation Accuracy: 0.863651
+>>> Fold 3 | Iteration 2/30
+================================================================================
+Iteration 2
+time/training: 261.212450504303
+time/total: 591.9351894855499
+time/evaluation: 0.0002205371856689453
+training/train_loss_mean: 0.28368258532732726
+training/train_loss_std: 0.030967378799177082
+training/action_accuracy: 0.8732876777648926
+Validation Accuracy: 0.864994
+>>> Fold 3 | Iteration 3/30
+================================================================================
+Iteration 3
+time/training: 261.4527726173401
+time/total: 922.380984544754
+time/evaluation: 0.00022149085998535156
+training/train_loss_mean: 0.2652313727065921
+training/train_loss_std: 0.02962782374683573
+training/action_accuracy: 0.8777372241020203
+Validation Accuracy: 0.868159
+>>> Fold 3 | Iteration 4/30
+================================================================================
+Iteration 4
+time/training: 261.3197877407074
+time/total: 1253.11514210701
+time/evaluation: 0.00022459030151367188
+training/train_loss_mean: 0.24851661663502456
+training/train_loss_std: 0.02862163941253754
+training/action_accuracy: 0.9093959927558899
+Validation Accuracy: 0.868907
+>>> Fold 3 | Iteration 5/30
+================================================================================
+Iteration 5
+time/training: 261.7602210044861
+time/total: 1583.9535355567932
+time/evaluation: 0.00021839141845703125
+training/train_loss_mean: 0.23552634903937578
+training/train_loss_std: 0.027429942801300945
+training/action_accuracy: 0.8756058216094971
+Validation Accuracy: 0.869263
+>>> Fold 3 | Iteration 6/30
+================================================================================
+Iteration 6
+time/training: 261.8572106361389
+time/total: 1915.1789717674255
+time/evaluation: 0.00022077560424804688
+training/train_loss_mean: 0.2246786549657583
+training/train_loss_std: 0.02647076469788025
+training/action_accuracy: 0.883185863494873
+Validation Accuracy: 0.869401
+>>> Fold 3 | Iteration 7/30
+================================================================================
+Iteration 7
+time/training: 261.8287978172302
+time/total: 2246.077462911606
+time/evaluation: 0.00023484230041503906
+training/train_loss_mean: 0.21685588321089744
+training/train_loss_std: 0.025634388089313308
+training/action_accuracy: 0.9117646813392639
+Validation Accuracy: 0.863215
+>>> Fold 3 | Iteration 8/30
+================================================================================
+Iteration 8
+time/training: 261.43456745147705
+time/total: 2576.8300869464874
+time/evaluation: 0.00022149085998535156
+training/train_loss_mean: 0.2098540662318468
+training/train_loss_std: 0.025005191390727904
+training/action_accuracy: 0.9203675389289856
+Validation Accuracy: 0.869677
+>>> Fold 3 | Iteration 9/30
+================================================================================
+Iteration 9
+time/training: 261.5993630886078
+time/total: 2907.827508211136
+time/evaluation: 0.00023698806762695312
+training/train_loss_mean: 0.20372836376428605
+training/train_loss_std: 0.024372549286452612
+training/action_accuracy: 0.9069401025772095
+Validation Accuracy: 0.868189
+>>> Fold 3 | Iteration 10/30
+================================================================================
+Iteration 10
+time/training: 261.63447642326355
+time/total: 3238.8745765686035
+time/evaluation: 0.0002238750457763672
+training/train_loss_mean: 0.19869658679962157
+training/train_loss_std: 0.023916901366413956
+training/action_accuracy: 0.9018182158470154
+Validation Accuracy: 0.871049
+>>> Fold 3 | Iteration 11/30
+================================================================================
+Iteration 11
+time/training: 261.4742953777313
+time/total: 3569.6094756126404
+time/evaluation: 0.000225067138671875
+training/train_loss_mean: 0.19371359224840998
+training/train_loss_std: 0.023058155233783444
+training/action_accuracy: 0.9007999897003174
+Validation Accuracy: 0.869263
+>>> Fold 3 | Iteration 12/30
+================================================================================
+Iteration 12
+time/training: 261.91974806785583
+time/total: 3900.8432235717773
+time/evaluation: 0.00022840499877929688
+training/train_loss_mean: 0.18990696527585388
+training/train_loss_std: 0.023170096410425854
+training/action_accuracy: 0.919928789138794
+Validation Accuracy: 0.868958
+>>> Fold 3 | Iteration 13/30
+================================================================================
+Iteration 13
+time/training: 262.04212951660156
+time/total: 4232.215252637863
+time/evaluation: 0.00022101402282714844
+training/train_loss_mean: 0.18545484402552248
+training/train_loss_std: 0.023038513892196744
+training/action_accuracy: 0.9297297596931458
+Validation Accuracy: 0.869684
+>>> Fold 3 | Iteration 14/30
+================================================================================
+Iteration 14
+time/training: 262.2002568244934
+time/total: 4563.637567043304
+time/evaluation: 0.00020742416381835938
+training/train_loss_mean: 0.18266603344753385
+training/train_loss_std: 0.022496687528370484
+training/action_accuracy: 0.9151713252067566
+Validation Accuracy: 0.869837
+>>> Fold 3 | Iteration 15/30
+================================================================================
+Iteration 15
+time/training: 258.9074652194977
+time/total: 4891.561964273453
+time/evaluation: 0.00021219253540039062
+training/train_loss_mean: 0.17944803571328521
+training/train_loss_std: 0.022455280272470367
+training/action_accuracy: 0.9038817286491394
+Validation Accuracy: 0.868530
+>>> Fold 3 | Iteration 16/30
+================================================================================
+Iteration 16
+time/training: 258.89039635658264
+time/total: 5219.770622491837
+time/evaluation: 0.00021386146545410156
+training/train_loss_mean: 0.17686626635491848
+training/train_loss_std: 0.02184693288084676
+training/action_accuracy: 0.936096727848053
+Validation Accuracy: 0.868827
+>>> Fold 3 | Iteration 17/30
+================================================================================
+Iteration 17
+time/training: 258.91259026527405
+time/total: 5548.235449075699
+time/evaluation: 0.00021767616271972656
+training/train_loss_mean: 0.17443026688024402
+training/train_loss_std: 0.021842383396642146
+training/action_accuracy: 0.9315525889396667
+Validation Accuracy: 0.868014
+>>> Fold 3 | Iteration 18/30
+================================================================================
+Iteration 18
+time/training: 259.00022077560425
+time/total: 5876.8805458545685
+time/evaluation: 0.0002143383026123047
+training/train_loss_mean: 0.17205608993917704
+training/train_loss_std: 0.021704138281689392
+training/action_accuracy: 0.9302788972854614
+Validation Accuracy: 0.870011
+>>> Fold 3 | Iteration 19/30
+================================================================================
+Iteration 19
+time/training: 258.866685628891
+time/total: 6205.405113458633
+time/evaluation: 0.00021266937255859375
+training/train_loss_mean: 0.16925576366111636
+training/train_loss_std: 0.021482840693206103
+training/action_accuracy: 0.9230769276618958
+Validation Accuracy: 0.870025
+>>> Fold 3 | Iteration 20/30
+================================================================================
+Iteration 20
+time/training: 258.9195747375488
+time/total: 6533.708073854446
+time/evaluation: 0.00020956993103027344
+training/train_loss_mean: 0.16712507539987564
+training/train_loss_std: 0.020836680346060624
+training/action_accuracy: 0.9515625238418579
+Validation Accuracy: 0.868319
+>>> Fold 3 | Iteration 21/30
+================================================================================
+Iteration 21
+time/training: 258.9711654186249
+time/total: 6861.98196387291
+time/evaluation: 0.0002181529998779297
+training/train_loss_mean: 0.16550500421375036
+training/train_loss_std: 0.021200001081112023
+training/action_accuracy: 0.9487603306770325
+Validation Accuracy: 0.868806
+>>> Fold 3 | Iteration 22/30
+================================================================================
+Iteration 22
+time/training: 258.9166040420532
+time/total: 7190.361279010773
+time/evaluation: 0.0002181529998779297
+training/train_loss_mean: 0.16359859094321727
+training/train_loss_std: 0.020821131624275572
+training/action_accuracy: 0.9351081252098083
+Validation Accuracy: 0.867985
+>>> Fold 3 | Iteration 23/30
+================================================================================
+Iteration 23
+time/training: 259.00492238998413
+time/total: 7518.73486828804
+time/evaluation: 0.0002110004425048828
+training/train_loss_mean: 0.1614308409549296
+training/train_loss_std: 0.020862648539834355
+training/action_accuracy: 0.9276437759399414
+Validation Accuracy: 0.869292
+>>> Fold 3 | Iteration 24/30
+================================================================================
+Iteration 24
+time/training: 258.95894956588745
+time/total: 7846.865390539169
+time/evaluation: 0.0002219676971435547
+training/train_loss_mean: 0.16030408513695002
+training/train_loss_std: 0.020245092256557753
+training/action_accuracy: 0.9369527101516724
+Validation Accuracy: 0.867695
+>>> Fold 3 | Iteration 25/30
+================================================================================
+Iteration 25
+time/training: 259.55467462539673
+time/total: 8175.96133184433
+time/evaluation: 0.00021958351135253906
+training/train_loss_mean: 0.1588275068126619
+training/train_loss_std: 0.02065205577528596
+training/action_accuracy: 0.9500000476837158
+Validation Accuracy: 0.868719
+>>> Fold 3 | Iteration 26/30
+================================================================================
+Iteration 26
+time/training: 259.17764353752136
+time/total: 8504.972782373428
+time/evaluation: 0.00021195411682128906
+training/train_loss_mean: 0.15746772748678922
+training/train_loss_std: 0.02016099265135052
+training/action_accuracy: 0.9407999515533447
+Validation Accuracy: 0.868675
+>>> Fold 3 | Iteration 27/30
+================================================================================
+Iteration 27
+time/training: 258.9641647338867
+time/total: 8833.395921230316
+time/evaluation: 0.00021529197692871094
+training/train_loss_mean: 0.15551580208465457
+training/train_loss_std: 0.020463754490013118
+training/action_accuracy: 0.9244966506958008
+Validation Accuracy: 0.869829
+>>> Fold 3 | Iteration 28/30
+================================================================================
+Iteration 28
+time/training: 259.00844287872314
+time/total: 9161.476452827454
+time/evaluation: 0.0002193450927734375
+training/train_loss_mean: 0.15468821152970194
+training/train_loss_std: 0.01992693183135837
+training/action_accuracy: 0.907317042350769
+Validation Accuracy: 0.869539
+>>> Fold 3 | Iteration 29/30
+================================================================================
+Iteration 29
+time/training: 259.00900077819824
+time/total: 9489.923406600952
+time/evaluation: 0.00021314620971679688
+training/train_loss_mean: 0.15314953388422728
+training/train_loss_std: 0.020079442255125257
+training/action_accuracy: 0.9070208668708801
+Validation Accuracy: 0.869016
+>>> Fold 3 | Iteration 30/30
+================================================================================
+Iteration 30
+time/training: 259.027028799057
+time/total: 9817.967242240906
+time/evaluation: 0.000213623046875
+training/train_loss_mean: 0.15243078416213393
+training/train_loss_std: 0.020026264682040443
+training/action_accuracy: 0.928709089756012
+Validation Accuracy: 0.868406
+======================================================================
+Evaluating IPD metrics for Fold 3/5
+======================================================================
+IPD Eval → Acc.t=1 0.587, Acc.t>1 0.805, LL.t=1 -6730, LL.t>1 -153461, Cor-Time 0.487, RMSE-Time 0.246, Cor-Avg 0.901, RMSE-Avg 0.093
+======================================================================
+Fold 3/5 - Performance Metrics
+======================================================================
+Metric               Value
+----------------------------------------------------------------------
+Acc. t = 1           0.587
+Acc. t > 1           0.805
+LL t = 1             -6730
+LL t > 1           -153461
+Cor-Time             0.487
+Cor-Avg.             0.901
+RMSE-Time            0.246
+RMSE-Avg.            0.093
+======================================================================

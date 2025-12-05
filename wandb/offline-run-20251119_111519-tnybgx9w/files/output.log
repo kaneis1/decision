@@ -1,0 +1,108 @@
+>>> Fold 2 | Iteration 1/30
+Training loss: 0.360208
+Validation loss: 0.362762
+>>> Fold 2 | Iteration 2/30
+Training loss: 0.332045
+Validation loss: 0.406685
+>>> Fold 2 | Iteration 3/30
+Training loss: 0.312269
+Validation loss: 0.450947
+>>> Fold 2 | Iteration 4/30
+Training loss: 0.301393
+Validation loss: 0.475337
+>>> Fold 2 | Iteration 5/30
+Training loss: 0.295453
+Validation loss: 0.492229
+>>> Fold 2 | Iteration 6/30
+Training loss: 0.291929
+Validation loss: 0.509507
+>>> Fold 2 | Iteration 7/30
+Training loss: 0.289134
+Validation loss: 0.522808
+>>> Fold 2 | Iteration 8/30
+Training loss: 0.287255
+Validation loss: 0.532492
+>>> Fold 2 | Iteration 9/30
+Training loss: 0.285663
+Validation loss: 0.545376
+>>> Fold 2 | Iteration 10/30
+Training loss: 0.284496
+Validation loss: 0.548982
+>>> Fold 2 | Iteration 11/30
+Training loss: 0.283592
+Validation loss: 0.556687
+>>> Fold 2 | Iteration 12/30
+Training loss: 0.282702
+Validation loss: 0.570255
+>>> Fold 2 | Iteration 13/30
+Training loss: 0.281518
+Validation loss: 0.573442
+>>> Fold 2 | Iteration 14/30
+Training loss: 0.280963
+Validation loss: 0.574810
+>>> Fold 2 | Iteration 15/30
+Training loss: 0.280259
+Validation loss: 0.591567
+>>> Fold 2 | Iteration 16/30
+Training loss: 0.280006
+Validation loss: 0.593156
+>>> Fold 2 | Iteration 17/30
+Training loss: 0.279552
+Validation loss: 0.608449
+>>> Fold 2 | Iteration 18/30
+Training loss: 0.279108
+Validation loss: 0.584424
+>>> Fold 2 | Iteration 19/30
+Training loss: 0.278501
+Validation loss: 0.601230
+>>> Fold 2 | Iteration 20/30
+Training loss: 0.278143
+Validation loss: 0.606097
+>>> Fold 2 | Iteration 21/30
+Training loss: 0.277538
+Validation loss: 0.610854
+>>> Fold 2 | Iteration 22/30
+Training loss: 0.277262
+Validation loss: 0.612631
+>>> Fold 2 | Iteration 23/30
+Training loss: 0.276609
+Validation loss: 0.613111
+>>> Fold 2 | Iteration 24/30
+Training loss: 0.275480
+Validation loss: 0.629470
+>>> Fold 2 | Iteration 25/30
+Training loss: 0.275238
+Validation loss: 0.623890
+>>> Fold 2 | Iteration 26/30
+Training loss: 0.274473
+Validation loss: 0.642434
+>>> Fold 2 | Iteration 27/30
+Training loss: 0.273700
+Validation loss: 0.621584
+>>> Fold 2 | Iteration 28/30
+Training loss: 0.272803
+Validation loss: 0.634598
+>>> Fold 2 | Iteration 29/30
+Training loss: 0.272349
+Validation loss: 0.636008
+>>> Fold 2 | Iteration 30/30
+Training loss: 0.271300
+Validation loss: 0.646045
+======================================================================
+Evaluating IPD metrics for Fold 2/5
+======================================================================
+GPT2 IPD Eval → Acc.t=1 0.725, Acc.t>1 0.857, LL.t=1 -3215, LL.t>1 -16621, Cor-Time 0.892, RMSE-Time 0.085, Cor-Avg 0.000, RMSE-Avg 0.000
+======================================================================
+Fold 2/5 - Performance Metrics
+======================================================================
+Metric               Value
+----------------------------------------------------------------------
+Acc. t = 1           0.725
+Acc. t > 1           0.857
+LL t = 1             -3215
+LL t > 1            -16621
+Cor-Time             0.892
+Cor-Avg.             0.000
+RMSE-Time            0.085
+RMSE-Avg.            0.000
+======================================================================

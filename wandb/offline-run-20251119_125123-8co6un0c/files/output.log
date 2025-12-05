@@ -1,0 +1,20 @@
+>>> Fold 5 | Iteration 1/30
+Training loss: 0.358764
+Validation loss: 0.368764
+>>> Fold 5 | Iteration 2/30
+Training loss: 0.330245
+Validation loss: 0.415932
+>>> Fold 5 | Iteration 3/30
+Training loss: 0.309367
+Validation loss: 0.468780
+>>> Fold 5 | Iteration 4/30
+Training loss: 0.299330
+Validation loss: 0.482771
+>>> Fold 5 | Iteration 5/30
+Training loss: 0.293169
+Validation loss: 0.518396
+>>> Fold 5 | Iteration 6/30
+Training loss: 0.289699
+Validation loss: 0.524383
+>>> Fold 5 | Iteration 7/30
+Training loss: 0.287442

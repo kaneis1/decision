@@ -1,0 +1,19 @@
+{"time":"2025-11-19T03:24:11.311062479-05:00","level":"INFO","msg":"main: starting server","port-filename":"/tmp/tmpw2mvy5tk/port-612381.txt","pid":612381,"log-level":0,"disable-analytics":false,"shutdown-on-parent-exit":false,"enable-dcgm-profiling":false}
+{"time":"2025-11-19T03:24:11.311616513-05:00","level":"INFO","msg":"server: accepting connections","addr":{"Name":"/tmp/wandb-612381-612737-2390890874/socket","Net":"unix"}}
+{"time":"2025-11-19T03:24:11.311810279-05:00","level":"INFO","msg":"server: will exit if parent process dies","ppid":612381}
+{"time":"2025-11-19T03:24:11.485937489-05:00","level":"INFO","msg":"connection: ManageConnectionData: new connection created","id":"1(@)"}
+{"time":"2025-11-19T03:24:11.495193249-05:00","level":"INFO","msg":"handleInformInit: received","streamId":"7zehtnjm","id":"1(@)"}
+{"time":"2025-11-19T03:24:11.621738647-05:00","level":"INFO","msg":"handleInformInit: stream started","streamId":"7zehtnjm","id":"1(@)"}
+{"time":"2025-11-19T03:56:07.040447776-05:00","level":"INFO","msg":"handleInformFinish: finish message received","streamId":"7zehtnjm","id":"1(@)"}
+{"time":"2025-11-19T03:56:07.057100281-05:00","level":"INFO","msg":"handleInformFinish: stream closed","streamId":"7zehtnjm","id":"1(@)"}
+{"time":"2025-11-19T03:56:07.571431403-05:00","level":"INFO","msg":"handleInformInit: received","streamId":"g8limhk3","id":"1(@)"}
+{"time":"2025-11-19T03:56:07.707490922-05:00","level":"INFO","msg":"handleInformInit: stream started","streamId":"g8limhk3","id":"1(@)"}
+{"time":"2025-11-19T04:27:57.62989991-05:00","level":"INFO","msg":"handleInformFinish: finish message received","streamId":"g8limhk3","id":"1(@)"}
+{"time":"2025-11-19T04:27:57.631117996-05:00","level":"INFO","msg":"handleInformFinish: stream closed","streamId":"g8limhk3","id":"1(@)"}
+{"time":"2025-11-19T04:27:58.170714984-05:00","level":"INFO","msg":"handleInformInit: received","streamId":"0a7d4wd2","id":"1(@)"}
+{"time":"2025-11-19T04:27:58.392244277-05:00","level":"INFO","msg":"handleInformInit: stream started","streamId":"0a7d4wd2","id":"1(@)"}
+{"time":"2025-11-19T04:59:55.408594165-05:00","level":"INFO","msg":"handleInformFinish: finish message received","streamId":"0a7d4wd2","id":"1(@)"}
+{"time":"2025-11-19T04:59:55.409926611-05:00","level":"INFO","msg":"handleInformFinish: stream closed","streamId":"0a7d4wd2","id":"1(@)"}
+{"time":"2025-11-19T04:59:55.995325606-05:00","level":"INFO","msg":"handleInformInit: received","streamId":"n2njw5ek","id":"1(@)"}
+{"time":"2025-11-19T04:59:56.133453569-05:00","level":"INFO","msg":"handleInformInit: stream started","streamId":"n2njw5ek","id":"1(@)"}
+{"time":"2025-11-19T05:18:15.679679622-05:00","level":"INFO","msg":"server: parent process exited, terminating service process"}

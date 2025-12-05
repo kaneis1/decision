@@ -1,0 +1,40 @@
+>>> Fold 4 | Iteration 1/30
+Training loss: 0.357909
+Validation loss: 0.371308
+>>> Fold 4 | Iteration 2/30
+Training loss: 0.330956
+Validation loss: 0.406316
+>>> Fold 4 | Iteration 3/30
+Training loss: 0.310608
+Validation loss: 0.457731
+>>> Fold 4 | Iteration 4/30
+Training loss: 0.299871
+Validation loss: 0.484585
+>>> Fold 4 | Iteration 5/30
+Training loss: 0.293313
+Validation loss: 0.509838
+>>> Fold 4 | Iteration 6/30
+Training loss: 0.289801
+Validation loss: 0.516726
+>>> Fold 4 | Iteration 7/30
+Training loss: 0.286871
+Validation loss: 0.533841
+>>> Fold 4 | Iteration 8/30
+Training loss: 0.284888
+Validation loss: 0.553563
+>>> Fold 4 | Iteration 9/30
+Training loss: 0.282851
+Validation loss: 0.568019
+>>> Fold 4 | Iteration 10/30
+Training loss: 0.281725
+Validation loss: 0.579045
+>>> Fold 4 | Iteration 11/30
+Training loss: 0.281150
+Validation loss: 0.583937
+>>> Fold 4 | Iteration 12/30
+Training loss: 0.280051
+Validation loss: 0.600016
+>>> Fold 4 | Iteration 13/30
+Training loss: 0.278595
+Validation loss: 0.591718
+>>> Fold 4 | Iteration 14/30

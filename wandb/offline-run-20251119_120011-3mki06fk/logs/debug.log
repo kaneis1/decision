@@ -1,0 +1,11 @@
+2025-11-19 12:00:11,535 INFO    MainThread:614951 [wandb_init.py:setup_run_log_directory():713] Logging user logs to /sc/arion/projects/lin_lab/complexbehavior/wandb/offline-run-20251119_120011-3mki06fk/logs/debug.log
+2025-11-19 12:00:11,535 INFO    MainThread:614951 [wandb_init.py:setup_run_log_directory():714] Logging internal logs to /sc/arion/projects/lin_lab/complexbehavior/wandb/offline-run-20251119_120011-3mki06fk/logs/debug-internal.log
+2025-11-19 12:00:11,535 INFO    MainThread:614951 [wandb_init.py:init():840] calling init triggers
+2025-11-19 12:00:11,535 INFO    MainThread:614951 [wandb_init.py:init():845] wandb.init called with sweep_config: {}
+config: {'csv_path': 'decision/data/all_data.csv', 'K': 40, 'batch_size': 128, 'embed_dim': 256, 'n_layer': 4, 'n_head': 4, 'activation_function': 'relu', 'dropout': 0.1, 'learning_rate': 0.0001, 'weight_decay': 0.0001, 'warmup_steps': 100, 'max_iters': 30, 'num_steps_per_iter': 10000, 'device': 'cuda', 'log_to_wandb': True, 'wandb_api_key': '', 'num_folds': 5, 'fold_index': 3, 'fold_seed': 0, 'run_all_folds': True, 'history_k': 3, '_wandb': {}}
+2025-11-19 12:00:11,535 INFO    MainThread:614951 [wandb_init.py:init():888] starting backend
+2025-11-19 12:00:11,535 INFO    MainThread:614951 [wandb_init.py:init():891] sending inform_init request
+2025-11-19 12:00:11,537 INFO    MainThread:614951 [wandb_init.py:init():899] backend started and connected
+2025-11-19 12:00:11,540 INFO    MainThread:614951 [wandb_init.py:init():969] updated telemetry
+2025-11-19 12:00:11,542 INFO    MainThread:614951 [wandb_init.py:init():993] communicating run to backend with 90.0 second timeout
+2025-11-19 12:00:11,878 INFO    MainThread:614951 [wandb_init.py:init():1040] starting run threads in backend
