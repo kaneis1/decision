@@ -14,3 +14,7 @@ config: {'csv_path': 'decision/data/all_data.csv', 'K': 40, 'batch_size': 128, '
 2025-11-19 12:06:18,499 INFO    MainThread:3316557 [wandb_run.py:_redirect():2421] Wrapping output streams.
 2025-11-19 12:06:18,499 INFO    MainThread:3316557 [wandb_run.py:_redirect():2444] Redirects installed.
 2025-11-19 12:06:18,499 INFO    MainThread:3316557 [wandb_init.py:init():1080] run started, returning control to user process
+2025-11-19 14:58:51,780 INFO    MainThread:3316557 [wandb_run.py:_finish():2270] finishing run decision-transformer/lj0le7g7
+2025-11-19 14:58:51,781 INFO    MainThread:3316557 [wandb_run.py:_atexit_cleanup():2469] got exitcode: 0
+2025-11-19 14:58:51,785 INFO    MainThread:3316557 [wandb_run.py:_restore():2451] restore
+2025-11-19 14:58:51,785 INFO    MainThread:3316557 [wandb_run.py:_restore():2457] restore done

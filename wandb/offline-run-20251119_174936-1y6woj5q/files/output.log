@@ -1,0 +1,63 @@
+>>> Fold 4 | Iteration 1/15
+Training loss: 0.372955
+Validation loss: 0.367540
+>>> Fold 4 | Iteration 2/15
+Training loss: 0.356977
+Validation loss: 0.367327
+>>> Fold 4 | Iteration 3/15
+Training loss: 0.352706
+Validation loss: 0.368183
+>>> Fold 4 | Iteration 4/15
+Training loss: 0.349343
+Validation loss: 0.370075
+>>> Fold 4 | Iteration 5/15
+Training loss: 0.346096
+Validation loss: 0.372758
+>>> Fold 4 | Iteration 6/15
+Training loss: 0.342522
+Validation loss: 0.378889
+>>> Fold 4 | Iteration 7/15
+Training loss: 0.338894
+Validation loss: 0.384265
+>>> Fold 4 | Iteration 8/15
+Training loss: 0.335489
+Validation loss: 0.390421
+>>> Fold 4 | Iteration 9/15
+Training loss: 0.332188
+Validation loss: 0.395546
+>>> Fold 4 | Iteration 10/15
+Training loss: 0.329727
+Validation loss: 0.399842
+>>> Fold 4 | Iteration 11/15
+Training loss: 0.327248
+Validation loss: 0.402406
+>>> Fold 4 | Iteration 12/15
+Training loss: 0.324710
+Validation loss: 0.407267
+>>> Fold 4 | Iteration 13/15
+Training loss: 0.322694
+Validation loss: 0.415123
+>>> Fold 4 | Iteration 14/15
+Training loss: 0.320961
+Validation loss: 0.421549
+>>> Fold 4 | Iteration 15/15
+Training loss: 0.318796
+Validation loss: 0.423669
+======================================================================
+Evaluating IPD metrics for Fold 4/5
+======================================================================
+GPT2 IPD Eval → Acc.t=1 0.715, Acc.t>1 0.858, LL.t=1 -3321, LL.t>1 -9346, Cor-Time 0.977, RMSE-Time 0.055, Cor-Avg 0.000, RMSE-Avg 0.000
+======================================================================
+Fold 4/5 - Performance Metrics
+======================================================================
+Metric               Value
+----------------------------------------------------------------------
+Acc. t = 1           0.715
+Acc. t > 1           0.858
+LL t = 1             -3321
+LL t > 1             -9346
+Cor-Time             0.977
+Cor-Avg.             0.000
+RMSE-Time            0.055
+RMSE-Avg.            0.000
+======================================================================

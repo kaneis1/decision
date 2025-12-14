@@ -1,0 +1,45 @@
+>>> Fold 1 | Iteration 1/15
+Training loss: 0.362151
+Validation loss: 0.367051
+>>> Fold 1 | Iteration 2/15
+Training loss: 0.347100
+Validation loss: 0.379331
+>>> Fold 1 | Iteration 3/15
+Training loss: 0.338322
+Validation loss: 0.392647
+>>> Fold 1 | Iteration 4/15
+Training loss: 0.331703
+Validation loss: 0.404933
+>>> Fold 1 | Iteration 5/15
+Training loss: 0.326250
+Validation loss: 0.414944
+>>> Fold 1 | Iteration 6/15
+Training loss: 0.322197
+Validation loss: 0.425833
+>>> Fold 1 | Iteration 7/15
+Training loss: 0.318841
+Validation loss: 0.435783
+>>> Fold 1 | Iteration 8/15
+Training loss: 0.316744
+Validation loss: 0.447117
+>>> Fold 1 | Iteration 9/15
+Training loss: 0.314654
+Validation loss: 0.452701
+>>> Fold 1 | Iteration 10/15
+Training loss: 0.312310
+Validation loss: 0.460838
+>>> Fold 1 | Iteration 11/15
+Traceback (most recent call last):
+  File "/sc/arion/projects/lin_lab/complexbehavior/decision/experiment_ipd_gpt.py", line 666, in <module>
+    main(args)
+  File "/sc/arion/projects/lin_lab/complexbehavior/decision/experiment_ipd_gpt.py", line 588, in main
+    val_loss, model = train_single_fold(fold_idx, train_inds, val_inds)
+  File "/sc/arion/projects/lin_lab/complexbehavior/decision/experiment_ipd_gpt.py", line 520, in train_single_fold
+    loss_mean.backward()
+  File "/sc/arion/work/cuiz02/conda-envs/envs/dt/lib/python3.10/site-packages/torch/_tensor.py", line 521, in backward
+    torch.autograd.backward(
+  File "/sc/arion/work/cuiz02/conda-envs/envs/dt/lib/python3.10/site-packages/torch/autograd/__init__.py", line 289, in backward
+    _engine_run_backward(
+  File "/sc/arion/work/cuiz02/conda-envs/envs/dt/lib/python3.10/site-packages/torch/autograd/graph.py", line 769, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt

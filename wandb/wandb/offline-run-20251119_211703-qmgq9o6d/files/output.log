@@ -1,0 +1,63 @@
+>>> Fold 4 | Iteration 1/15
+Training loss: 0.518330
+Validation Accuracy: 0.838178
+>>> Fold 4 | Iteration 2/15
+Training loss: 0.358562
+Validation Accuracy: 0.865706
+>>> Fold 4 | Iteration 3/15
+Training loss: 0.301924
+Validation Accuracy: 0.891594
+>>> Fold 4 | Iteration 4/15
+Training loss: 0.258395
+Validation Accuracy: 0.901395
+>>> Fold 4 | Iteration 5/15
+Training loss: 0.239381
+Validation Accuracy: 0.907984
+>>> Fold 4 | Iteration 6/15
+Training loss: 0.226391
+Validation Accuracy: 0.915610
+>>> Fold 4 | Iteration 7/15
+Training loss: 0.213563
+Validation Accuracy: 0.922367
+>>> Fold 4 | Iteration 8/15
+Training loss: 0.201280
+Validation Accuracy: 0.926447
+>>> Fold 4 | Iteration 9/15
+Training loss: 0.191400
+Validation Accuracy: 0.929424
+>>> Fold 4 | Iteration 10/15
+Training loss: 0.183437
+Validation Accuracy: 0.932100
+>>> Fold 4 | Iteration 11/15
+Training loss: 0.176111
+Validation Accuracy: 0.935077
+>>> Fold 4 | Iteration 12/15
+Training loss: 0.168782
+Validation Accuracy: 0.937786
+>>> Fold 4 | Iteration 13/15
+Training loss: 0.161847
+Validation Accuracy: 0.940696
+>>> Fold 4 | Iteration 14/15
+Training loss: 0.155346
+Validation Accuracy: 0.943138
+>>> Fold 4 | Iteration 15/15
+Training loss: 0.149719
+Validation Accuracy: 0.945613
+======================================================================
+Evaluating IPD metrics for Fold 4/5
+======================================================================
+BERT IPD Eval → Acc.t=1 0.833, Acc.t>1 0.906, LL.t=1 -8162, LL.t>1 -8826, Cor-Time 0.975, RMSE-Time 0.065, Cor-Avg 0.000, RMSE-Avg 0.000
+======================================================================
+Fold 4/5 - Performance Metrics
+======================================================================
+Metric               Value
+----------------------------------------------------------------------
+Acc. t = 1           0.833
+Acc. t > 1           0.906
+LL t = 1             -8162
+LL t > 1             -8826
+Cor-Time             0.975
+Cor-Avg.             0.000
+RMSE-Time            0.065
+RMSE-Avg.            0.000
+======================================================================

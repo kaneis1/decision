@@ -1,0 +1,61 @@
+>>> Fold 2 | Iteration 1/15
+================================================================================
+Iteration 1
+time/training: 266.5408203601837
+time/total: 267.7422983646393
+time/evaluation: 0.0002162456512451172
+training/train_loss_mean: 0.3035458703622222
+training/train_loss_std: 0.040688132430612735
+training/action_accuracy: 0.8683067560195923
+Validation Accuracy: 0.869944
+>>> Fold 2 | Iteration 2/15
+================================================================================
+Iteration 2
+time/training: 266.86014127731323
+time/total: 631.9101605415344
+time/evaluation: 0.0002143383026123047
+training/train_loss_mean: 0.2614269179224968
+training/train_loss_std: 0.03017472808499877
+training/action_accuracy: 0.9323432445526123
+Validation Accuracy: 0.874434
+>>> Fold 2 | Iteration 3/15
+================================================================================
+Iteration 3
+time/training: 269.31444692611694
+time/total: 998.467976808548
+time/evaluation: 0.00022292137145996094
+training/train_loss_mean: 0.23067592045217752
+training/train_loss_std: 0.027578157266527282
+training/action_accuracy: 0.9184615612030029
+Validation Accuracy: 0.870077
+>>> Fold 2 | Iteration 4/15
+================================================================================
+Iteration 4
+time/training: 269.23841381073
+time/total: 1365.5303583145142
+time/evaluation: 0.00023484230041503906
+training/train_loss_mean: 0.21027216086238623
+training/train_loss_std: 0.025399238152106905
+training/action_accuracy: 0.9258648753166199
+Validation Accuracy: 0.872395
+>>> Fold 2 | Iteration 5/15
+================================================================================
+Iteration 5
+time/training: 269.77376079559326
+time/total: 1733.1426050662994
+time/evaluation: 0.00021505355834960938
+training/train_loss_mean: 0.19641597256213428
+training/train_loss_std: 0.023777185895553207
+training/action_accuracy: 0.9397590160369873
+Validation Accuracy: 0.872605
+>>> Fold 2 | Iteration 6/15
+================================================================================
+Iteration 6
+time/training: 269.57556319236755
+time/total: 2100.293174982071
+time/evaluation: 0.0002205371856689453
+training/train_loss_mean: 0.18705033940002322
+training/train_loss_std: 0.022961304037183286
+training/action_accuracy: 0.9232111573219299
+Validation Accuracy: 0.875799
+>>> Fold 2 | Iteration 7/15

@@ -6,3 +6,8 @@
 {"time":"2025-11-19T12:06:17.573909879-05:00","level":"INFO","msg":"writer: started","stream_id":"lj0le7g7"}
 {"time":"2025-11-19T12:06:17.573953201-05:00","level":"INFO","msg":"sender: started","stream_id":"lj0le7g7"}
 {"time":"2025-11-19T12:06:17.574016947-05:00","level":"WARN","msg":"runupserter: server does not expand metric globs but the x_server_side_expand_glob_metrics setting is set; ignoring"}
+{"time":"2025-11-19T14:58:51.809052524-05:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2025-11-19T14:58:51.812381075-05:00","level":"INFO","msg":"stream: closing","id":"lj0le7g7"}
+{"time":"2025-11-19T14:58:51.812410246-05:00","level":"INFO","msg":"handler: closed","stream_id":"lj0le7g7"}
+{"time":"2025-11-19T14:58:51.843025064-05:00","level":"INFO","msg":"sender: closed","stream_id":"lj0le7g7"}
+{"time":"2025-11-19T14:58:51.843080481-05:00","level":"INFO","msg":"stream: closed","id":"lj0le7g7"}

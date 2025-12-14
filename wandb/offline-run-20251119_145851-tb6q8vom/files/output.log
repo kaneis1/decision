@@ -1,0 +1,29 @@
+>>> Fold 5 | Iteration 1/30
+================================================================================
+Iteration 1
+time/training: 268.6062204837799
+time/total: 269.6188006401062
+time/evaluation: 0.00021600723266601562
+training/train_loss_mean: 0.3135709665209055
+training/train_loss_std: 0.04596932206889624
+training/action_accuracy: 0.8634920716285706
+Validation Accuracy: 0.864982
+>>> Fold 5 | Iteration 2/30
+================================================================================
+Iteration 2
+time/training: 268.9130311012268
+time/total: 608.5958762168884
+time/evaluation: 0.00021600723266601562
+training/train_loss_mean: 0.28337949852496386
+training/train_loss_std: 0.031097641452618417
+training/action_accuracy: 0.8527918457984924
+Validation Accuracy: 0.866500
+>>> Fold 5 | Iteration 3/30
+================================================================================
+Iteration 3
+time/training: 268.4400179386139
+time/total: 947.1776688098907
+time/evaluation: 0.00021028518676757812
+training/train_loss_mean: 0.2636150478705764
+training/train_loss_std: 0.02945819410280835
+training/action_accuracy: 0.8708487153053284

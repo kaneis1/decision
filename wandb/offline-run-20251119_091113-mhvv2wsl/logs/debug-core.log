@@ -16,3 +16,8 @@
 {"time":"2025-11-19T12:06:17.244608145-05:00","level":"INFO","msg":"handleInformFinish: stream closed","streamId":"mhvv2wsl","id":"1(@)"}
 {"time":"2025-11-19T12:06:17.426083311-05:00","level":"INFO","msg":"handleInformInit: received","streamId":"lj0le7g7","id":"1(@)"}
 {"time":"2025-11-19T12:06:17.573791005-05:00","level":"INFO","msg":"handleInformInit: stream started","streamId":"lj0le7g7","id":"1(@)"}
+{"time":"2025-11-19T14:58:51.811933647-05:00","level":"INFO","msg":"handleInformFinish: finish message received","streamId":"lj0le7g7","id":"1(@)"}
+{"time":"2025-11-19T14:58:51.843512011-05:00","level":"INFO","msg":"handleInformFinish: stream closed","streamId":"lj0le7g7","id":"1(@)"}
+{"time":"2025-11-19T14:58:51.966075052-05:00","level":"INFO","msg":"handleInformInit: received","streamId":"tb6q8vom","id":"1(@)"}
+{"time":"2025-11-19T14:58:52.103996753-05:00","level":"INFO","msg":"handleInformInit: stream started","streamId":"tb6q8vom","id":"1(@)"}
+{"time":"2025-11-19T15:20:09.97156088-05:00","level":"INFO","msg":"server: parent process exited, terminating service process"}

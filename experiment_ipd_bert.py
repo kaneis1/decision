@@ -870,7 +870,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--csv_path", type=str, default="decision/data/all_data.csv")
+    parser.add_argument("--csv_path", type=str, default="data/all_data.csv")
     parser.add_argument("--history_k", type=int, default=3, help="Number of history decision columns to include in model (default: 3). When history_k=3, includes my.decision1-3 and other.decision1-3")
     parser.add_argument("--K", type=int, default=40, help="Context length for Decision Transformer")
     parser.add_argument("--batch_size", type=int, default=128)

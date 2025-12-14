@@ -47,7 +47,7 @@ Average validation MSE over 5 fold(s): 0.133717
 I am updating model to have 4 modality and the model will be R1,s1,MO1,A1,R2,S2,MO2,A2.... etc
 this is more like a human thinking way like we meet a question, and we saw reward we get first, then we see state and with states we can think about a strategy, at last we move.
 
-bert_model:
+bert_dt_model:
 ======================================================================
 BERT IPD Eval → Acc.t=1 0.842, Acc.t>1 0.926, LL.t=1 -4357, LL.t>1 -3932, Cor-Time 0.967, RMSE-Time 0.060, Cor-Avg 0.000, RMSE-Avg 0.000
 
@@ -63,8 +63,7 @@ LL t > 1             -3932
 Cor-Time             0.967
 Cor-Avg.             0.000
 RMSE-Time            0.060
-RMSE-Avg.            0.000
-======================================================================
+RMSE-Avg.            0.000======================================================================
 
 gpt2_model:
 ======================================================================
@@ -96,7 +95,8 @@ idea
 -- adjust decision-transformer so that it can encode 4 more classes feature
 done! -- use 5-fold instead of top 10% reward   
 -- I want to create a model that give the state and reward, the model can give its prediction
-
+-- use choice 13k as dataset
+-- find out why dt can work with 3 order input as R,S,A
 task
 done! -- run the original one @experiment_ipd.py which set payoff as reward     
 -- learn how to input MO in the this model as the fourth modality  
@@ -104,6 +104,10 @@ done! -- run the original one @experiment_ipd.py which set payoff as reward
 done! -- instead of using top 10% reward, we use ramdonly 20% data to prove another 80% data accracy 
 -- use `Predicting Human Cooperation` paper metric to find out and also need to learn how to take trajectories
 done! -- divide trajectories by period
+
+-- recreate lstm and all model in your paper
+-- find another good dataset
+-- 
 
 question:
 

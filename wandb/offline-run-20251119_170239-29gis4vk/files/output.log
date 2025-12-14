@@ -1,0 +1,23 @@
+>>> Fold 1 | Iteration 1/30
+================================================================================
+Iteration 1
+time/training: 265.28036308288574
+time/total: 266.0936040878296
+time/evaluation: 0.00021028518676757812
+training/train_loss_mean: 0.30126768426597117
+training/train_loss_std: 0.04210782987370684
+training/action_accuracy: 0.9186991453170776
+Validation Accuracy: 0.862710
+>>> Fold 1 | Iteration 2/30
+Traceback (most recent call last):
+  File "/sc/arion/projects/lin_lab/complexbehavior/decision/experiment_ipd.py", line 537, in <module>
+    main(args)
+  File "/sc/arion/projects/lin_lab/complexbehavior/decision/experiment_ipd.py", line 450, in main
+    val_accuracy, model = train_single_fold(fold_idx, train_inds, val_inds)
+  File "/sc/arion/projects/lin_lab/complexbehavior/decision/experiment_ipd.py", line 393, in train_single_fold
+    logs = trainer.train_iteration(num_steps=args.num_steps_per_iter, iter_num=itn, print_logs=True)
+  File "/sc/arion/projects/lin_lab/complexbehavior/decision/decision_transformer/training/trainer.py", line 30, in train_iteration
+    train_loss = self.train_step()
+  File "/sc/arion/projects/lin_lab/complexbehavior/decision/decision_transformer/training/seq_trainer.py", line 19, in train_step
+    action_target = action_target.reshape(-1, act_dim)[attention_mask.reshape(-1) > 0]
+KeyboardInterrupt
