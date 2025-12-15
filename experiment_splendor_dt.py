@@ -713,6 +713,16 @@ def main(args):
     
     returns = np.array([tr["rewards"].sum() for tr in trajectories], dtype=np.float32)
     traj_lens = np.array([tr["lens"] for tr in trajectories], dtype=np.int32)
+    
+    # Filter to top 10% by return (score)
+    top_percentile = args.top_percentile / 100.0
+    num_keep = max(1, int(len(trajectories) * top_percentile))
+    top_indices = np.argsort(returns)[-num_keep:]  # Get indices of top trajectories
+    
+    # Filter trajectories to keep only top 10%
+    trajectories = [trajectories[i] for i in top_indices]
+    returns = returns[top_indices]
+    traj_lens = traj_lens[top_indices]
     num_timesteps = int(traj_lens.sum())
     
     total_trajs = len(trajectories)
@@ -727,9 +737,11 @@ def main(args):
         state_dim = test_encoded.shape[0]
     
     print("=" * 50)
+    print(f"Generated {args.num_trajectories} trajectories, keeping top {args.top_percentile}% ({total_trajs} trajectories)")
     print(f"Splendor dataset: {total_trajs} trajectories, {num_timesteps} timesteps")
     print(f"State dim = {state_dim}, Action dim = 1")
-    print(f"Avg return: {returns.mean():.3f} ± {returns.std():.3f}")
+    print(f"Avg return (filtered): {returns.mean():.3f} ± {returns.std():.3f}")
+    print(f"Return range: [{returns.min():.3f}, {returns.max():.3f}]")
     print(f"Max ep len: {max_ep_len}")
     print("=" * 50)
     
@@ -749,7 +761,15 @@ def main(args):
     state_mean = train_states.mean(axis=0)
     state_std = train_states.std(axis=0) + 1e-6
     
-    p_sample = train_traj_lens / train_traj_lens.sum()
+    # Weight sampling by returns (higher returns = more likely to be sampled)
+    # Normalize returns to positive values and use as sampling weights
+    min_return = train_returns.min()
+    normalized_returns = train_returns - min_return + 1.0  # Shift to positive
+    # Use exponential weighting to emphasize high returns more
+    return_weights = np.power(normalized_returns / normalized_returns.mean(), args.return_weight_power)
+    p_sample = return_weights / return_weights.sum()
+    
+    print(f"Sampling weights: min={p_sample.min():.4f}, max={p_sample.max():.4f}, mean={p_sample.mean():.4f}")
     
     state_dim = train_states.shape[1]
     act_dim = 1
@@ -794,6 +814,9 @@ def main(args):
         
         return s_i, a_i, r_i, d_i, rtg_i, ts, mask
     
+    # Store trajectory returns for loss weighting
+    traj_returns_cache = {}
+    
     def get_batch(batch_size=args.batch_size, max_len=max_len):
         batch_inds = np.random.choice(
             np.arange(num_traj_keep),
@@ -803,8 +826,12 @@ def main(args):
         )
         
         s, a, r, d, rtg, timesteps, mask = [], [], [], [], [], [], []
+        batch_traj_returns = []
         for i in range(batch_size):
-            traj = trajectories[int(train_inds[batch_inds[i]])]
+            traj_idx = int(train_inds[batch_inds[i]])
+            traj = trajectories[traj_idx]
+            traj_return = train_returns[batch_inds[i]]
+            batch_traj_returns.append(traj_return)
             si = random.randint(0, traj["rewards"].shape[0] - 1)
             s_i, a_i, r_i, d_i, rtg_i, ts, m = make_padded_sample(traj, si)
             
@@ -823,6 +850,9 @@ def main(args):
         rtg = torch.from_numpy(np.concatenate(rtg, axis=0)).to(dtype=torch.float32, device=device)
         timesteps_t = torch.from_numpy(np.concatenate(timesteps, axis=0)).to(dtype=torch.long, device=device)
         mask_t = torch.from_numpy(np.concatenate(mask, axis=0)).to(device=device)
+        
+        # Store batch trajectory returns for loss weighting
+        get_batch.last_traj_returns = torch.from_numpy(np.array(batch_traj_returns)).to(dtype=torch.float32, device=device)
         
         return s, a, r, d, rtg, timesteps_t, mask_t
     
@@ -876,12 +906,33 @@ def main(args):
         loss_raw = ce_loss(a_hat.squeeze(-1), action_target)
         return loss_raw.mean()
     
-    # Simplified loss: use MSE for now since we have action indices
-    def loss_fn_simple(s_hat, a_hat, r_hat, s, a, r):
+    # Loss function weighted by trajectory returns (prioritize high-scoring trajectories)
+    def loss_fn_weighted(s_hat, a_hat, r_hat, s, a, r):
         # a_hat: (N, 1) - predicted action index (continuous)
         # a: (N, 1) - target action index (continuous, but represents discrete action)
-        # Use MSE loss
-        return torch.nn.functional.mse_loss(a_hat, a)
+        # Weight loss by trajectory returns to prioritize high-scoring trajectories
+        mse_loss = torch.nn.functional.mse_loss(a_hat, a, reduction='none')
+        
+        # Get trajectory returns from get_batch (stored in closure)
+        if hasattr(get_batch, 'last_traj_returns'):
+            traj_returns = get_batch.last_traj_returns
+            # Normalize returns to create weights
+            min_return = traj_returns.min()
+            max_return = traj_returns.max()
+            if max_return > min_return:
+                normalized_returns = (traj_returns - min_return + 1.0) / (max_return - min_return + 1.0)
+            else:
+                normalized_returns = torch.ones_like(traj_returns)
+            
+            # Apply power to emphasize high returns more
+            weights = torch.pow(normalized_returns, args.return_weight_power)
+            # Average weight per batch (simplified - ideally weight per timestep)
+            avg_weight = weights.mean()
+            weighted_loss = mse_loss.mean() * (1.0 + avg_weight)  # Boost loss for high-return trajectories
+        else:
+            weighted_loss = mse_loss.mean()
+        
+        return weighted_loss
     
     trainer = SequenceTrainer(
         model=model,
@@ -889,7 +940,7 @@ def main(args):
         batch_size=args.batch_size,
         get_batch=get_batch,
         scheduler=scheduler,
-        loss_fn=loss_fn_simple,
+        loss_fn=loss_fn_weighted,
         eval_fns=[],
     )
     
@@ -958,12 +1009,19 @@ def main(args):
                 else:
                     rewards_t = torch.zeros((1, 1, 1), dtype=torch.float32, device=device)
                 
-                # Compute returns to go
+                # Compute returns to go - use higher target for better scores
+                # Set target RTG to a high value (e.g., 90th percentile of training returns)
+                target_rtg = np.percentile(train_returns, args.target_rtg_percentile) if len(train_returns) > 0 else 20.0
                 if len(rewards_history) > 0:
                     rtg = discount_cumsum(np.array(rewards_history), gamma=1.0)
-                    rtg_t = torch.from_numpy(rtg.reshape(-1, 1)[None]).to(dtype=torch.float32, device=device) / float(scale)
+                    # Use target RTG instead of actual remaining return to encourage high-scoring behavior
+                    remaining_steps = max(1, 60 - len(rewards_history))
+                    target_remaining = target_rtg - rtg[-1] if len(rtg) > 0 else target_rtg
+                    rtg_adjusted = np.concatenate([rtg, [target_remaining]]) if len(rtg) > 0 else np.array([target_rtg])
+                    rtg_t = torch.from_numpy(rtg_adjusted.reshape(-1, 1)[None]).to(dtype=torch.float32, device=device) / float(scale)
                 else:
-                    rtg_t = torch.zeros((1, 1, 1), dtype=torch.float32, device=device)
+                    # At start, use high target RTG
+                    rtg_t = torch.full((1, 1, 1), target_rtg / float(scale), dtype=torch.float32, device=device)
                 
                 ts_t = torch.from_numpy(np.array(timesteps)[None]).to(dtype=torch.long, device=device) if len(timesteps) > 0 else torch.zeros((1, 1), dtype=torch.long, device=device)
                 
@@ -1009,11 +1067,23 @@ def main(args):
             eval_scores.append(env.score)
             print(f"Episode {episode + 1}/{eval_episodes}: {env.turns} turns, {env.score} points")
     
+    # Calculate metrics matching the report format (Reinforcement_Learning_Report.pdf)
+    # Loss is defined as taking more than 60 turns to win
+    num_losses = sum(1 for t in eval_turns if t > 60)
+    wins = [t for t in eval_turns if t <= 60]
+    avg_turns_without_losses = np.mean(wins) if len(wins) > 0 else 0.0
+    avg_score = np.mean(eval_scores)
+    avg_turns = np.mean(eval_turns)
+    win_rate = len(wins) / len(eval_turns) if len(eval_turns) > 0 else 0.0
+    
     print("=" * 50)
-    print("Evaluation Results:")
-    print(f"Average turns: {np.mean(eval_turns):.2f} ± {np.std(eval_turns):.2f}")
-    print(f"Average score: {np.mean(eval_scores):.2f} ± {np.std(eval_scores):.2f}")
-    print(f"Win rate: {sum(1 for t in eval_turns if t <= 60) / len(eval_turns):.2%}")
+    print(f"Decision Transformer Agent Results - {eval_episodes} episodes")
+    print("=" * 50)
+    print(f"Average score over {eval_episodes} episodes: {avg_score:.2f}")
+    print(f"Number of Losses: {num_losses}")
+    print(f"Average turns to win without losses: {avg_turns_without_losses:.2f}")
+    print(f"Average turns (all episodes): {avg_turns:.2f}")
+    print(f"Win rate: {win_rate:.2%}")
     print("=" * 50)
     
     # Save model
@@ -1025,7 +1095,10 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--card_data_path", type=str, default="data/card_data.csv")
-    parser.add_argument("--num_trajectories", type=int, default=1000, help="Number of trajectories to generate")
+    parser.add_argument("--num_trajectories", type=int, default=10000, help="Number of trajectories to generate")
+    parser.add_argument("--top_percentile", type=float, default=10.0, help="Top percentile of trajectories to keep for training (default: 10% = top 10%)")
+    parser.add_argument("--return_weight_power", type=float, default=2.0, help="Power for return-based sampling weights (higher = more emphasis on high returns)")
+    parser.add_argument("--target_rtg_percentile", type=float, default=90.0, help="Percentile of training returns to use as target RTG during evaluation (default: 90th percentile)")
     parser.add_argument("--agent_type", type=str, default="random", choices=["random", "dqn"])
     parser.add_argument("--use_state_hashing", action="store_true", help="Use feature hashing for states")
     parser.add_argument("--state_size", type=int, default=1000, help="Size of hashed state vector")
