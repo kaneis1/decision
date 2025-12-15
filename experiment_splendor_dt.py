@@ -16,8 +16,22 @@ import itertools
 import numpy as np
 import pandas as pd
 import torch
-import wandb
-from sklearn.feature_extraction import FeatureHasher
+
+# Optional sklearn import (only needed for state hashing)
+try:
+    from sklearn.feature_extraction import FeatureHasher
+    SKLEARN_AVAILABLE = True
+except ImportError:
+    SKLEARN_AVAILABLE = False
+    print("Warning: sklearn not available. State hashing will be disabled.")
+
+# Optional wandb import
+try:
+    import wandb
+    WANDB_AVAILABLE = True
+except ImportError:
+    WANDB_AVAILABLE = False
+    print("Warning: wandb not available. Logging to wandb will be disabled.")
 
 from decision_transformer.training.seq_trainer import SequenceTrainer
 from decision_transformer.models.decision_transformer import DecisionTransformer
@@ -679,6 +693,9 @@ def main(args):
     hasher = None
     
     if args.use_state_hashing:
+        if not SKLEARN_AVAILABLE:
+            print("Error: --use_state_hashing requires sklearn. Install with: pip install scikit-learn")
+            return
         hasher = FeatureHasher(n_features=args.state_size, input_type='dict')
     
     trajectories, max_ep_len = generate_trajectories(
@@ -886,7 +903,10 @@ def main(args):
             logs = {}
         
         if args.log_to_wandb:
-            wandb.log(logs)
+            if WANDB_AVAILABLE:
+                wandb.log(logs)
+            else:
+                print("Warning: wandb logging requested but wandb is not installed.")
     
     # Evaluation
     print("Evaluating model...")
@@ -923,7 +943,10 @@ def main(args):
                 
                 # Prepare input for model
                 states_t = torch.from_numpy(np.array(states_history)[None]).to(dtype=torch.float32, device=device)
-                states_t = (states_t - state_mean) / state_std
+                # Convert state_mean and state_std to tensors on the same device
+                state_mean_t = torch.from_numpy(state_mean).to(dtype=torch.float32, device=device)
+                state_std_t = torch.from_numpy(state_std).to(dtype=torch.float32, device=device)
+                states_t = (states_t - state_mean_t) / state_std_t
                 
                 if len(actions_history) > 0:
                     actions_t = torch.from_numpy(np.array(actions_history).reshape(-1, 1)[None]).to(dtype=torch.float32, device=device)
@@ -1019,7 +1042,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_iters", type=int, default=10)
     parser.add_argument("--num_steps_per_iter", type=int, default=10000)
     parser.add_argument("--eval_episodes", type=int, default=100)
-    parser.add_argument("--device", type=str, default="cuda")
+    parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--log_to_wandb", action="store_true")
     parser.add_argument("--save_model", action="store_true")
