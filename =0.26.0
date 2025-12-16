@@ -1,0 +1,53 @@
+2 channel Terms of Service accepted
+Retrieving notices: - \ done
+Channels:
+ - conda-forge
+ - defaults
+Platform: linux-64
+Collecting package metadata (repodata.json): / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - done
+Solving environment: | / - done
+
+
+==> WARNING: A newer version of conda exists. <==
+    current version: 25.5.1
+    latest version: 25.11.1
+
+Please update conda by running
+
+    $ conda update -n base -c defaults conda
+
+
+
+## Package Plan ##
+
+  environment location: /sc/arion/work/cuiz02/conda-envs/envs/dt
+
+  added / updated specs:
+    - gym
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    gym-0.26.1                 |  py310hfdc917e_0         842 KB  conda-forge
+    gym-notices-0.1.0          |     pyhe01879c_0          11 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:         853 KB
+
+The following NEW packages will be INSTALLED:
+
+  gym                conda-forge/linux-64::gym-0.26.1-py310hfdc917e_0 
+  gym-notices        conda-forge/noarch::gym-notices-0.1.0-pyhe01879c_0 
+
+
+
+Downloading and Extracting Packages: ...working...gym-0.26.1           | 842 KB    |            |   0% 
+gym-notices-0.1.0    | 11 KB     |            |   0% [A
+gym-notices-0.1.0    | 11 KB     | ########## | 100% [A
+gym-notices-0.1.0    | 11 KB     | ########## | 100% [Agym-0.26.1           | 842 KB    | 1          |   2% gym-0.26.1           | 842 KB    | ########## | 100% 
+gym-notices-0.1.0    | 11 KB     | ########## | 100% [Agym-0.26.1           | 842 KB    | ########## | 100% gym-0.26.1           | 842 KB    | ########## | 100%                                                      
+                                                     [A done
+Preparing transaction: | done
+Verifying transaction: - \ | / - \ | / - \ done
+Executing transaction: / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - done
