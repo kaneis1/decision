@@ -2,7 +2,7 @@
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
-from scipy.stats.stats import pearsonr
+from scipy.stats import pearsonr
 import pickle
 import numpy as np
 import pandas as pd
