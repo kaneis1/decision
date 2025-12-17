@@ -84,6 +84,88 @@ RMSE-Time            0.097
 RMSE-Avg.            0.000
 ======================================================================
 
+main.py - Baseline LSTM/AR/LR Models Results
+======================================================================
+Recreated baseline models from "Predicting Human Cooperation" paper using main.py
+Model Configuration: LSTM with 10 hidden nodes, 2 layers, 5-fold cross-validation
+
+IPD (Iterated Prisoner's Dilemma) Task Results:
+----------------------------------------------------------------------
+Task Type: Binary classification (cooperate/defect)
+Loss Function: BCEWithLogitsLoss (changed from MSE for binary classification)
+Evaluation Metric: Accuracy (changed from MSE)
+
+Models Compared:
+- LSTM: LSTM-based sequence model
+- AR: AutoRegressive (VAR) model
+- LR: Logistic Regression model
+
+Key Results (from Figures/):
+1. Action Prediction Accuracy (ipd_accuracy_nodes_10_layers_2.png):
+   - Shows accuracy over 8 prediction time steps for LSTM, AR, and LR models
+   - Accuracy calculated using binary classification (threshold at 0.5)
+   - Results printed: lstm_acc, ar_acc, lr_acc
+
+2. Cooperation Rate Predictions (ipd_coop_nodes_10_layers_2.png):
+   - Comparison of cooperation rates across all models vs human data
+   - Shows mean cooperation rates with standard error bands
+   - Models: LSTM (red), AR (blue), LR (green), Human (black)
+
+3. Individual Model Cooperation Predictions:
+   - ipd_lstm_coop_nodes_10_layers_2.png: LSTM predictions vs real cooperation rates
+   - ipd_ar_coop_nodes_10_layers_2.png: AR predictions vs real cooperation rates
+   - ipd_lr_coop_nodes_10_layers_2.png: LR predictions vs real cooperation rates
+
+4. Training Loss (ipd_lstm_loss_nodes_10_layers_2.png):
+   - LSTM training loss over batches during training
+   - Training parameters: 10 epochs, batch size 100, learning rate 1e-2
+
+IGT (Iowa Gambling Task) Results:
+----------------------------------------------------------------------
+Task Type: Multi-class classification (4 deck choices)
+Loss Function: MSE (maintained for multi-class setting)
+Evaluation Metric: MSE for action prediction, correct deck choice rates
+
+Models Compared:
+- LSTM: LSTM-based sequence model
+- AR: AutoRegressive (VAR) model
+
+Key Results (from Figures/):
+1. Action Prediction MSE (igt_mse_nodes_10_layers_2.png):
+   - MSE comparison between LSTM and AR models over 94 time steps
+   - Results: LSTM MSE = 0.0149, AR MSE = 0.0202
+   - LSTM performs better (lower MSE) than AR model
+
+2. Correct Deck Choice Rates (igt_corr_nodes_10_layers_2.png):
+   - Percentage of choosing better decks (C and D) over time
+   - Comparison: LSTM (red), AR (blue), Human (black)
+   - Shows learning curve for selecting advantageous decks
+
+3. Individual Deck Choice Predictions (igt_pred_nodes_10_layers_2.png):
+   - 2x2 subplot showing choice rates for each deck (A, B, C, D)
+   - Comparison of LSTM, AR predictions vs human choices for all decks
+
+4. Model-Specific Deck Predictions:
+   - igt_ar_pred_nodes_10_layers_2.png: AR model predictions for each deck vs real
+   - igt_lstm_pred_nodes_10_layers_2.png: LSTM predictions for each deck vs real
+   - 4 subplots (one per deck) showing prediction accuracy
+
+5. Correct Deck Predictions:
+   - igt_ar_corr_nodes_10_layers_2.png: AR correct deck predictions vs real
+   - igt_lstm_corr_nodes_10_layers_2.png: LSTM correct deck predictions vs real
+
+6. Training Loss (igt_lstm_loss_nodes_10_layers_2.png):
+   - LSTM training loss over batches
+   - Training parameters: 100 epochs, batch size 10, learning rate 1e-2
+
+Key Findings:
+- IPD: Binary classification approach with BCEWithLogitsLoss and accuracy metrics
+- IGT: LSTM outperforms AR model (MSE: 0.0149 vs 0.0202)
+- Both tasks use 5-fold cross-validation for robust evaluation
+- All models show learning curves that can be compared to human behavior patterns
+
+======================================================================
+
 idea
 
 -- use Shap to weight different features

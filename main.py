@@ -22,6 +22,7 @@ MSE = mean_squared_error
 lag = 1
 
 import matplotlib as mpl
+import math
 
 mpl.rcParams.update(mpl.rcParamsDefault)
 
@@ -82,6 +83,31 @@ def accuracy_by_time(r, p):
         
         # Calculate accuracy
         comparison = (p_binary == r_binary)
+        acc.append(np.mean(comparison.astype(float)))
+    return np.array(acc)
+
+
+def accuracy_by_time_igt(r, p):
+    """Calculate accuracy for multi-class classification (IGT - 4 decks) at each time step"""
+    # Convert torch tensors to numpy arrays if needed
+    if torch.is_tensor(r):
+        r = r.cpu().numpy()
+    if torch.is_tensor(p):
+        p = p.cpu().numpy()
+    
+    # Ensure both are numpy arrays
+    r = np.asarray(r)
+    p = np.asarray(p)
+    
+    acc = []
+    for t in np.arange(r.shape[1]):
+        # Get predicted deck (argmax of probabilities)
+        p_pred = np.argmax(p[:, t, :], axis=1)
+        # Get actual deck (argmax of one-hot encoding)
+        r_pred = np.argmax(r[:, t, :], axis=1)
+        
+        # Calculate accuracy
+        comparison = (p_pred == r_pred)
         acc.append(np.mean(comparison.astype(float)))
     return np.array(acc)
 
@@ -149,6 +175,78 @@ def ipd_set2arset():
     return train_arset
 
 
+## BERT Transformer Components
+
+class PositionalEncoding(nn.Module):
+    def __init__(self, d_model, max_len=5000):
+        super(PositionalEncoding, self).__init__()
+        pe = torch.zeros(max_len, d_model)
+        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model))
+        pe[:, 0::2] = torch.sin(position * div_term)
+        pe[:, 1::2] = torch.cos(position * div_term)
+        pe = pe.unsqueeze(1)
+        self.register_buffer('pe', pe)
+
+    def forward(self, x):
+        seq_len = x.size(0)
+        pe = self.pe[:seq_len, :, :]
+        return x + pe
+
+
+class MultiHeadAttention(nn.Module):
+    def __init__(self, d_model, num_heads):
+        super(MultiHeadAttention, self).__init__()
+        assert d_model % num_heads == 0
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.d_k = d_model // num_heads
+        self.w_q = nn.Linear(d_model, d_model)
+        self.w_k = nn.Linear(d_model, d_model)
+        self.w_v = nn.Linear(d_model, d_model)
+        self.w_o = nn.Linear(d_model, d_model)
+
+    def scaled_dot_product_attention(self, Q, K, V, mask=None):
+        scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(self.d_k)
+        if mask is not None:
+            scores = scores.masked_fill(mask == 0, -1e9)
+        attention_weights = torch.softmax(scores, dim=-1)
+        output = torch.matmul(attention_weights, V)
+        return output
+
+    def forward(self, query, key, value, mask=None):
+        batch_size = query.size(0)
+        Q = self.w_q(query).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        K = self.w_k(key).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        V = self.w_v(value).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        attention_output = self.scaled_dot_product_attention(Q, K, V, mask)
+        attention_output = attention_output.transpose(1, 2).contiguous().view(batch_size, -1, self.d_model)
+        output = self.w_o(attention_output)
+        return output
+
+
+class TransformerBlock(nn.Module):
+    def __init__(self, d_model, num_heads, d_ff, dropout=0.1):
+        super(TransformerBlock, self).__init__()
+        self.attention = MultiHeadAttention(d_model, num_heads)
+        self.norm1 = nn.LayerNorm(d_model)
+        self.norm2 = nn.LayerNorm(d_model)
+        self.feed_forward = nn.Sequential(
+            nn.Linear(d_model, d_ff),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(d_ff, d_model)
+        )
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x, mask=None):
+        attn_output = self.attention(x, x, x, mask)
+        x = self.norm1(x + self.dropout(attn_output))
+        ff_output = self.feed_forward(x)
+        x = self.norm2(x + self.dropout(ff_output))
+        return x
+
+
 class lstmModel(nn.Module):
     def __init__(self, in_dim, hidden_dim, out_dim, layer_num):
         super().__init__()
@@ -163,6 +261,36 @@ class lstmModel(nn.Module):
         out = self.fcLayer(out)
         # Return logits for BCEWithLogitsLoss (no softmax)
         return out
+
+
+class bertModelIPD(nn.Module):
+    """BERT model for IPD binary classification"""
+    def __init__(self, in_dim, hidden_dim, num_layers, num_heads=2, dropout=0.1, max_len=5000):
+        super().__init__()
+        self.d_model = hidden_dim
+        self.num_layers = num_layers
+        self.num_heads = num_heads
+        self.state_dim = in_dim
+        self.input_embedding = nn.Linear(in_dim, hidden_dim)
+        self.positional_encoding = PositionalEncoding(hidden_dim, max_len=max_len)
+        self.transformer_blocks = nn.ModuleList([
+            TransformerBlock(hidden_dim, num_heads, hidden_dim * 4, dropout)
+            for _ in range(num_layers)
+        ])
+        self.output_layer = nn.Linear(hidden_dim, 1)  # Binary classification: 1 logit
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x, mask=None):
+        # x shape: (batch_size, seq_len, in_dim)
+        batch_size, seq_len, _ = x.shape
+        x = self.input_embedding(x)  # (batch_size, seq_len, hidden_dim)
+        x = x.transpose(0, 1)  # (seq_len, batch_size, hidden_dim)
+        x = self.positional_encoding(x)
+        x = x.transpose(0, 1)  # (batch_size, seq_len, hidden_dim)
+        for transformer_block in self.transformer_blocks:
+            x = transformer_block(x, mask)
+        x = self.output_layer(x)  # (batch_size, seq_len, 1)
+        return x
 
 
 n_fold = 5
@@ -228,6 +356,46 @@ for fold in np.arange(n_fold):
                     )
                 )
     lstm = lstm.eval()
+    # bert
+    bert_ipd = bertModelIPD(2, n_nodes, n_layers, num_heads=2, dropout=0.1)
+    criterion_bert = nn.BCEWithLogitsLoss()
+    optimizer_bert = optim.Adam(bert_ipd.parameters(), lr=1e-2)
+    loss_set_bert = []
+    for ep in np.arange(n_epochs):
+        for bc in np.arange(train_set.shape[0] / batch_size):
+            inputs = Variable(
+                torch.from_numpy(
+                    train_set[int(bc * batch_size) : int((bc + 1) * batch_size)]
+                )
+                .transpose(1, 2)
+                .float()
+            )
+            target = Variable(
+                torch.from_numpy(
+                    train_set[int(bc * batch_size) : int((bc + 1) * batch_size)]
+                )
+                .transpose(1, 2)
+                .float()
+            )
+            output = bert_ipd(inputs)
+            loss = criterion_bert(output.squeeze()[:, :-lag, 0], target[:, lag:, 0])
+            optimizer_bert.zero_grad()
+            loss.backward()
+            optimizer_bert.step()
+            print_loss = loss.item()
+            loss_set_bert.append(print_loss)
+            if bc % window == 0:
+                print(fold, "BERT")
+                print(
+                    "Epoch[{}/{}], Batch[{}/{}], Loss: {:.5f}".format(
+                        ep + 1,
+                        n_epochs,
+                        bc + 1,
+                        train_set.shape[0] / batch_size,
+                        print_loss,
+                    )
+                )
+    bert_ipd = bert_ipd.eval()
     # ar
     train_arset = ipd_set2arset()
     armodel = VAR(train_arset)
@@ -250,11 +418,15 @@ for fold in np.arange(n_fold):
     py_logits = lstm(varX).squeeze().data.cpu().numpy()
     # Convert logits to probabilities for evaluation
     py = torch.sigmoid(torch.from_numpy(py_logits)).numpy()
+    # bert predictions
+    pybert_logits = bert_ipd(varX).squeeze().data.cpu().numpy()
+    pybert = torch.sigmoid(torch.from_numpy(pybert_logits)).numpy()
     if fold == 0:
         test_set_full = test_set
         py_full = py
         pyar_full = pyar
         pylr_full = pylr
+        pybert_full = pybert
     else:
         test_set_full = np.concatenate((test_set_full, test_set))
         px = torch.from_numpy(test_set_full).transpose(1, 2).float()
@@ -262,19 +434,23 @@ for fold in np.arange(n_fold):
         py_full = np.concatenate((py_full, py))
         pyar_full = np.concatenate((pyar_full, pyar))
         pylr_full = np.concatenate((pylr_full, pylr))
+        pybert_full = np.concatenate((pybert_full, pybert))
         py = py_full
         pyar = pyar_full
         pylr = pylr_full
+        pybert = pybert_full
 
 ryc = getCR(ry[:, lag:])
 pyc = getCR(py[:, :-lag])
 pycar = getCR(pyar[:, :-lag])
 pyclr = getCR(pylr)
+pycbert = getCR(pybert[:, :-lag, 0])
 
 plt.clf()
 plt.plot(np.arange(8) + 1, accuracy_by_time(ry[:, lag:], py[:, :-lag, 0]), "r", label="LSTM")
 plt.plot(np.arange(8) + 1, accuracy_by_time(ry[:, lag:], pyar[:, :-lag]), "b", label="AR")
 plt.plot(np.arange(8) + 1, accuracy_by_time(ry[:, lag:], pylr), "g", label="LR")
+plt.plot(np.arange(8) + 1, accuracy_by_time(ry[:, lag:], pybert[:, :-lag, 0]), "m", label="BERT")
 plt.legend(loc="best")
 plt.title("IPD Task - Action Prediction Accuracy")
 plt.xlabel("Prediction Time Steps")
@@ -287,12 +463,14 @@ plt.savefig(
 lstm_acc = np.mean(accuracy_by_time(ry[:, lag:], py[:, :-lag, 0]))
 ar_acc = np.mean(accuracy_by_time(ry[:, lag:], pyar[:, :-lag]))
 lr_acc = np.mean(accuracy_by_time(ry[:, lag:], pylr))
-print(lstm_acc, ar_acc, lr_acc)
+bert_acc = np.mean(accuracy_by_time(ry[:, lag:], pybert[:, :-lag, 0]))
+print("IPD Accuracy - LSTM:", lstm_acc, "AR:", ar_acc, "LR:", lr_acc, "BERT:", bert_acc)
 
 plt.clf()
 plt.plot(np.arange(pyc.shape[1]) + 1, np.array(pyc.mean(0)), "r", label="LSTM")
 plt.plot(np.arange(pycar.shape[1]) + 1, np.array(pycar.mean(0)), "b", label="AR")
 plt.plot(np.arange(pyclr.shape[1]) + 1, np.array(pyclr.mean(0)), "g", label="LR")
+plt.plot(np.arange(pycbert.shape[1]) + 1, np.array(pycbert.mean(0)), "m", label="BERT")
 plt.plot(np.arange(ryc.shape[1]) + 1, np.array(ryc.mean(0)), "k", label="Human")
 plt.fill_between(
     np.arange(pyc.shape[1]) + 1,
@@ -313,6 +491,13 @@ plt.fill_between(
     np.array(pyclr.mean(0)) - np.array(pyclr.std(0)) / np.sqrt(pyclr.shape[0] / n_fold),
     np.array(pyclr.mean(0)) + np.array(pyclr.std(0)) / np.sqrt(pyclr.shape[0] / n_fold),
     color="g",
+    alpha=0.2,
+)
+plt.fill_between(
+    np.arange(pycbert.shape[1]) + 1,
+    np.array(pycbert.mean(0)) - np.array(pycbert.std(0)) / np.sqrt(pycbert.shape[0] / n_fold),
+    np.array(pycbert.mean(0)) + np.array(pycbert.std(0)) / np.sqrt(pycbert.shape[0] / n_fold),
+    color="m",
     alpha=0.2,
 )
 plt.fill_between(
@@ -512,6 +697,37 @@ class lstmIGT(nn.Module):
         return out
 
 
+class bertModelIGT(nn.Module):
+    """BERT model for IGT multi-class classification"""
+    def __init__(self, in_dim, hidden_dim, num_layers, out_dim, num_heads=2, dropout=0.1, max_len=5000):
+        super().__init__()
+        self.d_model = hidden_dim
+        self.num_layers = num_layers
+        self.num_heads = num_heads
+        self.state_dim = in_dim
+        self.input_embedding = nn.Linear(in_dim, hidden_dim)
+        self.positional_encoding = PositionalEncoding(hidden_dim, max_len=max_len)
+        self.transformer_blocks = nn.ModuleList([
+            TransformerBlock(hidden_dim, num_heads, hidden_dim * 4, dropout)
+            for _ in range(num_layers)
+        ])
+        self.output_layer = nn.Linear(hidden_dim, out_dim)  # Multi-class: out_dim logits
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x, mask=None):
+        # x shape: (batch_size, seq_len, in_dim)
+        batch_size, seq_len, _ = x.shape
+        x = self.input_embedding(x)  # (batch_size, seq_len, hidden_dim)
+        x = x.transpose(0, 1)  # (seq_len, batch_size, hidden_dim)
+        x = self.positional_encoding(x)
+        x = x.transpose(0, 1)  # (batch_size, seq_len, hidden_dim)
+        for transformer_block in self.transformer_blocks:
+            x = transformer_block(x, mask)
+        x = self.output_layer(x)  # (batch_size, seq_len, out_dim)
+        x = nn.Softmax(dim=-1)(x)  # Apply softmax for multi-class
+        return x
+
+
 n_fold = 5
 for fold in np.arange(n_fold):
     test_set_igt, train_set_igt = valid_igt(0.2)
@@ -553,6 +769,42 @@ for fold in np.arange(n_fold):
                     )
                 )
     lstm_igt = lstm_igt.eval()
+    # bert
+    bert_igt = bertModelIGT(4, n_nodes, n_layers, 4, num_heads=2, dropout=0.1)
+    criterion_bert_igt = nn.MSELoss()
+    optimizer_bert_igt = optim.Adam(bert_igt.parameters(), lr=1e-2)
+    loss_set_bert_igt = []
+    for ep in np.arange(n_epochs):
+        for bc in np.arange(train_set_igt.shape[0] / batch_size):
+            inputs = Variable(
+                torch.from_numpy(
+                    train_set_igt[int(bc * batch_size) : int((bc + 1) * batch_size)]
+                ).float()
+            )
+            target = Variable(
+                torch.from_numpy(
+                    train_set_igt[int(bc * batch_size) : int((bc + 1) * batch_size)]
+                ).float()
+            )
+            output = bert_igt(inputs)
+            loss = criterion_bert_igt(output[:, :-lag], target[:, lag:])
+            optimizer_bert_igt.zero_grad()
+            loss.backward()
+            optimizer_bert_igt.step()
+            print_loss = loss.item()
+            loss_set_bert_igt.append(print_loss)
+            if bc % window == 0:
+                print(fold, "BERT IGT")
+                print(
+                    "Epoch[{}/{}], Batch[{}/{}], Loss: {:.5f}".format(
+                        ep + 1,
+                        n_epochs,
+                        bc + 1,
+                        train_set_igt.shape[0] / batch_size,
+                        print_loss,
+                    )
+                )
+    bert_igt = bert_igt.eval()
     # ar
     train_arset_igt = igt_set2arset()
     armodel_igt = VAR(train_arset_igt)
@@ -566,33 +818,42 @@ for fold in np.arange(n_fold):
             pyar2[i, t, :] = armodel_igt.forecast(np.array(px2[i, : t + 1]), lag)
     varX = Variable(px2)
     py2 = lstm_igt(varX).data.cpu().numpy()
+    py2bert = bert_igt(varX).data.cpu().numpy()
     if fold == 0:
         test_set_igt_full = test_set_igt
         py2_full = py2
         pyar2_full = pyar2
+        py2bert_full = py2bert
     else:
         test_set_igt_full = np.concatenate((test_set_igt_full, test_set_igt))
         px2 = torch.from_numpy(test_set_igt_full).float()
         ry2 = torch.from_numpy(test_set_igt_full).float()
         py2_full = np.concatenate((py2_full, py2))
         pyar2_full = np.concatenate((pyar2_full, pyar2))
+        py2bert_full = np.concatenate((py2bert_full, py2bert))
         py2 = py2_full
         pyar2 = pyar2_full
+        py2bert = py2bert_full
 
+ry2_np = ry2[:, lag:, :].cpu().numpy().copy()
 ryc2 = revTS(ry2[:, lag:].cpu().numpy().copy())
-ryr2 = getChR(ry2[:, lag:, :].cpu().numpy().copy())
-ryo2 = getCoR(ry2[:, lag:, :].cpu().numpy().copy())
+ryr2 = getChR(ry2_np)
+ryo2 = getCoR(ry2_np)
 pyc2 = revTS(py2[:, :-lag].copy())
 pyr2 = getChR(py2[:, :-lag, :].copy())
 pyo2 = getCoR(py2[:, :-lag, :].copy())
 pycar2 = revTS(pyar2[:, :-lag].copy())
 pyrar2 = getChR(pyar2[:, :-lag, :].copy())
 pyoar2 = getCoR(pyar2[:, :-lag, :].copy())
+pyo2bert = getCoR(py2bert[:, :-lag, :].copy())
+
+pyr2bert = getChR(py2bert[:, :-lag, :].copy())
 
 plt.clf()
 fig = plt.figure(figsize=(6.4, 4.8))
 plt.plot(np.arange(ryr2.shape[1]) + 1, MSE_by_time(ryr2, pyr2), "r", label="LSTM")
 plt.plot(np.arange(ryr2.shape[1]) + 1, MSE_by_time(ryr2, pyrar2), "b", label="AR")
+plt.plot(np.arange(ryr2.shape[1]) + 1, MSE_by_time(ryr2, pyr2bert), "m", label="BERT")
 plt.legend(loc="best")
 plt.title("IGT Task - Action Prediction MSE")
 plt.xlabel("Prediction Time Steps")
@@ -604,12 +865,33 @@ plt.savefig(
 
 igt_lstm_mse = np.mean(MSE_by_time(ryr2, pyr2))
 igt_ar_mse = np.mean(MSE_by_time(ryr2, pyrar2))
-print(n_nodes, n_layers, "MSE:", igt_lstm_mse, igt_ar_mse)
+igt_bert_mse = np.mean(MSE_by_time(ryr2, pyr2bert))
+print(n_nodes, n_layers, "MSE - LSTM:", igt_lstm_mse, "AR:", igt_ar_mse, "BERT:", igt_bert_mse)
 # 10 2 MSE: 0.014868835952435816 0.02016487523918092
+
+plt.clf()
+fig = plt.figure(figsize=(6.4, 4.8))
+plt.plot(np.arange(ryr2.shape[1]) + 1, accuracy_by_time_igt(ry2_np, py2[:, :-lag, :]), "r", label="LSTM")
+plt.plot(np.arange(ryr2.shape[1]) + 1, accuracy_by_time_igt(ry2_np, pyar2[:, :-lag, :]), "b", label="AR")
+plt.plot(np.arange(ryr2.shape[1]) + 1, accuracy_by_time_igt(ry2_np, py2bert[:, :-lag, :]), "m", label="BERT")
+plt.legend(loc="best")
+plt.title("IGT Task - Action Prediction Accuracy")
+plt.xlabel("Prediction Time Steps")
+plt.ylabel("Accuracy")
+plt.tight_layout()
+plt.savefig(
+    "Figures/igt_accuracy_nodes_" + str(n_nodes) + "_layers_" + str(n_layers) + ".png"
+)
+
+igt_lstm_acc = np.mean(accuracy_by_time_igt(ry2_np, py2[:, :-lag, :]))
+igt_ar_acc = np.mean(accuracy_by_time_igt(ry2_np, pyar2[:, :-lag, :]))
+igt_bert_acc = np.mean(accuracy_by_time_igt(ry2_np, py2bert[:, :-lag, :]))
+print(n_nodes, n_layers, "Accuracy - LSTM:", igt_lstm_acc, "AR:", igt_ar_acc, "BERT:", igt_bert_acc)
 
 plt.clf()
 plt.plot(np.arange(pyo2.shape[1]) + 1, np.array(pyo2.mean(0)), "r", label="LSTM")
 plt.plot(np.arange(ryo2.shape[1]) + 1, np.array(pyoar2.mean(0)), "b", label="AR")
+plt.plot(np.arange(ryo2.shape[1]) + 1, np.array(pyo2bert.mean(0)), "m", label="BERT")
 plt.plot(np.arange(ryo2.shape[1]) + 1, np.array(ryo2.mean(0)), "k", label="Human")
 plt.fill_between(
     np.arange(pyo2.shape[1]) + 1,
@@ -625,6 +907,15 @@ plt.fill_between(
     np.array(pyoar2.mean(0))
     + np.array(pyoar2.std(0)) / np.sqrt(pyoar2.shape[0] / n_fold),
     color="b",
+    alpha=0.2,
+)
+plt.fill_between(
+    np.arange(pyo2bert.shape[1]) + 1,
+    np.array(pyo2bert.mean(0))
+    - np.array(pyo2bert.std(0)) / np.sqrt(pyo2bert.shape[0] / n_fold),
+    np.array(pyo2bert.mean(0))
+    + np.array(pyo2bert.std(0)) / np.sqrt(pyo2bert.shape[0] / n_fold),
+    color="m",
     alpha=0.2,
 )
 plt.fill_between(
@@ -649,9 +940,10 @@ fig = plt.figure(figsize=(15, 10))
 decks = ["A", "B", "C", "D"]
 for i, d in enumerate(decks):
     ax = fig.add_subplot(2, 2, i + 1)
-    pyca, pycb, ryc = pyr2[:, :, i], pyrar2[:, :, i], ryr2[:, :, i]
+    pyca, pycb, pycbert, ryc = pyr2[:, :, i], pyrar2[:, :, i], pyr2bert[:, :, i], ryr2[:, :, i]
     ax.plot(np.arange(ryc.shape[1]) + 1, np.array(pyca.mean(0)), "r", label="LSTM")
     ax.plot(np.arange(ryc.shape[1]) + 1, np.array(pycb.mean(0)), "b", label="AR")
+    ax.plot(np.arange(ryc.shape[1]) + 1, np.array(pycbert.mean(0)), "m", label="BERT")
     ax.plot(np.arange(ryc.shape[1]) + 1, np.array(ryc.mean(0)), "k", label="Human")
     ax.fill_between(
         np.arange(ryc.shape[1]) + 1,
@@ -665,6 +957,13 @@ for i, d in enumerate(decks):
         np.array(pycb.mean(0)) - np.array(pycb.std(0)) / np.sqrt(pycb.shape[0]),
         np.array(pycb.mean(0)) + np.array(pycb.std(0)) / np.sqrt(pycb.shape[0]),
         color="b",
+        alpha=0.2,
+    )
+    ax.fill_between(
+        np.arange(ryc.shape[1]) + 1,
+        np.array(pycbert.mean(0)) - np.array(pycbert.std(0)) / np.sqrt(pycbert.shape[0]),
+        np.array(pycbert.mean(0)) + np.array(pycbert.std(0)) / np.sqrt(pycbert.shape[0]),
+        color="m",
         alpha=0.2,
     )
     ax.fill_between(
