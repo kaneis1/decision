@@ -54,17 +54,35 @@ def MSE_by_time(r, p):
 
 def accuracy_by_time(r, p):
     """Calculate accuracy for binary classification at each time step"""
+    # Convert torch tensors to numpy arrays if needed
+    if torch.is_tensor(r):
+        r = r.cpu().numpy()
+    if torch.is_tensor(p):
+        p = p.cpu().numpy()
+    
+    # Ensure both are numpy arrays
+    r = np.asarray(r)
+    p = np.asarray(p)
+    
     acc = []
     for t in np.arange(r.shape[1]):
         if len(p.shape) == 3:
             # p is already probabilities, threshold at 0.5
             p_binary = (p[:, t, 0] > 0.5).astype(float)
-            r_binary = r[:, t, 0]
+            # Check if r is 3D before accessing r[:, t, 0]
+            r_binary = r[:, t, 0] if len(r.shape) == 3 else r[:, t]
         else:
             # p is already probabilities, threshold at 0.5
             p_binary = (p[:, t] > 0.5).astype(float)
             r_binary = r[:, t, 0] if len(r.shape) == 3 else r[:, t]
-        acc.append(np.mean((p_binary == r_binary).astype(float)))
+        
+        # Ensure both are numpy arrays
+        p_binary = np.asarray(p_binary)
+        r_binary = np.asarray(r_binary)
+        
+        # Calculate accuracy
+        comparison = (p_binary == r_binary)
+        acc.append(np.mean(comparison.astype(float)))
     return np.array(acc)
 
 
