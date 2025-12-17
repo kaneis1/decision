@@ -99,17 +99,19 @@ Models Compared:
 - LSTM: LSTM-based sequence model
 - AR: AutoRegressive (VAR) model
 - LR: Logistic Regression model
+- BERT: Transformer-based model with multi-head attention (NEW)
 
 Key Results (from Figures/):
 1. Action Prediction Accuracy (ipd_accuracy_nodes_10_layers_2.png):
-   - Shows accuracy over 8 prediction time steps for LSTM, AR, and LR models
+   - Shows accuracy over 8 prediction time steps for LSTM, AR, LR, and BERT models
    - Accuracy calculated using binary classification (threshold at 0.5)
-   - Results printed: lstm_acc, ar_acc, lr_acc
+   - Results printed: lstm_acc, ar_acc, lr_acc, bert_acc
+   - BERT model added with same architecture (10 hidden nodes, 2 layers, 2 attention heads)
 
 2. Cooperation Rate Predictions (ipd_coop_nodes_10_layers_2.png):
    - Comparison of cooperation rates across all models vs human data
    - Shows mean cooperation rates with standard error bands
-   - Models: LSTM (red), AR (blue), LR (green), Human (black)
+   - Models: LSTM (red), AR (blue), LR (green), BERT (magenta), Human (black)
 
 3. Individual Model Cooperation Predictions:
    - ipd_lstm_coop_nodes_10_layers_2.png: LSTM predictions vs real cooperation rates
@@ -129,21 +131,27 @@ Evaluation Metric: MSE for action prediction, correct deck choice rates
 Models Compared:
 - LSTM: LSTM-based sequence model
 - AR: AutoRegressive (VAR) model
+- BERT: Transformer-based model with multi-head attention (NEW)
 
 Key Results (from Figures/):
 1. Action Prediction MSE (igt_mse_nodes_10_layers_2.png):
-   - MSE comparison between LSTM and AR models over 94 time steps
-   - Results: LSTM MSE = 0.0149, AR MSE = 0.0202
+   - MSE comparison between LSTM, AR, and BERT models over 94 time steps
+   - Results: LSTM MSE = 0.0149, AR MSE = 0.0202, BERT MSE (to be recorded)
    - LSTM performs better (lower MSE) than AR model
 
-2. Correct Deck Choice Rates (igt_corr_nodes_10_layers_2.png):
+2. Action Prediction Accuracy (igt_accuracy_nodes_10_layers_2.png):
+   - Accuracy comparison between LSTM, AR, and BERT models over 94 time steps
+   - Results: LSTM accuracy, AR accuracy, BERT accuracy (to be recorded)
+   - NEW: Added accuracy metric for IGT task
+
+3. Correct Deck Choice Rates (igt_corr_nodes_10_layers_2.png):
    - Percentage of choosing better decks (C and D) over time
-   - Comparison: LSTM (red), AR (blue), Human (black)
+   - Comparison: LSTM (red), AR (blue), BERT (magenta), Human (black)
    - Shows learning curve for selecting advantageous decks
 
-3. Individual Deck Choice Predictions (igt_pred_nodes_10_layers_2.png):
+4. Individual Deck Choice Predictions (igt_pred_nodes_10_layers_2.png):
    - 2x2 subplot showing choice rates for each deck (A, B, C, D)
-   - Comparison of LSTM, AR predictions vs human choices for all decks
+   - Comparison of LSTM, AR, BERT predictions vs human choices for all decks
 
 4. Model-Specific Deck Predictions:
    - igt_ar_pred_nodes_10_layers_2.png: AR model predictions for each deck vs real
@@ -163,6 +171,93 @@ Key Findings:
 - IGT: LSTM outperforms AR model (MSE: 0.0149 vs 0.0202)
 - Both tasks use 5-fold cross-validation for robust evaluation
 - All models show learning curves that can be compared to human behavior patterns
+- BERT model added to both IPD and IGT tasks for comparison
+- IGT task now includes accuracy metric in addition to MSE
+
+Data Preprocessing Comparison: main.py vs experiment_ipd_bert_dt.py
+======================================================================
+Comparison of data preprocessing methods between baseline (main.py) and Decision Transformer (experiment_ipd_bert_dt.py):
+
+main.py - Baseline Data Preprocessing:
+----------------------------------------------------------------------
+1. Data Loading:
+   - Reads from "./data/IPD/all_data.csv"
+   - Filters for period == 10
+   - Extracts trajectories: columns 9:27 (18 columns) → reshaped to (8258, 2, 9)
+   - Extracts regression data: columns 3:51 (48 columns)
+   - Random shuffle with fixed seed
+
+2. Data Format:
+   - Trajectories: (batch, 2, 9) where 2 = [my_action, other_action], 9 = time steps
+   - Actions encoded: 0→2, then -1 (cooperate=-1, defect=0)
+   - No state normalization
+   - No RTG (Return-To-Go) computation
+   - Direct sequence prediction: predict next action given history
+
+3. Train/Test Split:
+   - 5-fold cross-validation
+   - 20% test, 80% train per fold
+   - Simple random split
+
+4. Model Input:
+   - Direct action sequences: (batch, seq_len, action_dim)
+   - For LSTM: (batch, 2, 9) transposed to (batch, 9, 2)
+   - For BERT: same format, uses transformer architecture
+   - No state features, only action history
+
+experiment_ipd_bert_dt.py - Decision Transformer Data Preprocessing:
+----------------------------------------------------------------------
+1. Data Loading:
+   - Reads from CSV (default: "decision/data/all_data.csv")
+   - Groups by period (trajectory segmentation)
+   - Extracts state features: ["risk", "error", "delta", "infin", "contin", "r1", "r2", "r", "s", "t", "p"]
+   - Adds decision history: my.decision1-k, other.decision1-k (history_k parameter, default=3)
+   - State dimension: 11 base + 2*history_k decision columns
+
+2. Data Format:
+   - Trajectories: dict with 'observations', 'actions', 'rewards', 'terminals', 'lens'
+   - Observations: (T, state_dim) - normalized state features
+   - Actions: (T, 1) - binary (coop=1, defect=0)
+   - Rewards: (T,) - my.payoff1 values
+   - Computes RTG (Return-To-Go): discounted cumulative sum of rewards
+
+3. Train/Test Split:
+   - 90% for 5-fold cross-validation
+   - 10% held-out test set
+   - Stratified by trajectory returns
+
+4. Model Input:
+   - Decision Transformer format: (R, s, a, R, s, a, ...)
+   - States normalized: (states - state_mean) / state_std
+   - RTG normalized by scale (95th percentile of returns)
+   - Padded sequences to max_length=K (default 40)
+   - Attention masks for valid timesteps
+
+Key Differences:
+----------------------------------------------------------------------
+1. State Representation:
+   - main.py: Only action sequences (2D: my_action, other_action)
+   - experiment_ipd_bert_dt.py: Rich state features (11+ features) + action history
+
+2. Normalization:
+   - main.py: No normalization
+   - experiment_ipd_bert_dt.py: State normalization + RTG scaling
+
+3. Sequence Format:
+   - main.py: Simple action sequences
+   - experiment_ipd_bert_dt.py: Interleaved (R, s, a) tokens with RTG conditioning
+
+4. History Handling:
+   - main.py: Implicit in sequence (9 time steps)
+   - experiment_ipd_bert_dt.py: Explicit history_k parameter (default 3) in state features
+
+5. Reward Integration:
+   - main.py: No explicit reward modeling
+   - experiment_ipd_bert_dt.py: RTG (Return-To-Go) as conditioning signal
+
+6. Padding Strategy:
+   - main.py: No padding (fixed length sequences)
+   - experiment_ipd_bert_dt.py: Left-padding with zeros/masks for variable-length trajectories
 
 ======================================================================
 

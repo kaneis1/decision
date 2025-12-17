@@ -378,7 +378,9 @@ for fold in np.arange(n_fold):
                 .float()
             )
             output = bert_ipd(inputs)
-            loss = criterion_bert(output.squeeze()[:, :-lag, 0], target[:, lag:, 0])
+            # output shape: (batch, seq_len, 1), squeeze to (batch, seq_len)
+            output_squeezed = output.squeeze(-1)  # Only squeeze the last dimension
+            loss = criterion_bert(output_squeezed[:, :-lag], target[:, lag:, 0])
             optimizer_bert.zero_grad()
             loss.backward()
             optimizer_bert.step()
@@ -444,13 +446,15 @@ ryc = getCR(ry[:, lag:])
 pyc = getCR(py[:, :-lag])
 pycar = getCR(pyar[:, :-lag])
 pyclr = getCR(pylr)
-pycbert = getCR(pybert[:, :-lag, 0])
+# pybert is 2D (batch, seq_len) after squeeze, so no need for [:, :-lag, 0]
+pycbert = getCR(pybert[:, :-lag])
 
 plt.clf()
 plt.plot(np.arange(8) + 1, accuracy_by_time(ry[:, lag:], py[:, :-lag, 0]), "r", label="LSTM")
 plt.plot(np.arange(8) + 1, accuracy_by_time(ry[:, lag:], pyar[:, :-lag]), "b", label="AR")
 plt.plot(np.arange(8) + 1, accuracy_by_time(ry[:, lag:], pylr), "g", label="LR")
-plt.plot(np.arange(8) + 1, accuracy_by_time(ry[:, lag:], pybert[:, :-lag, 0]), "m", label="BERT")
+# pybert is 2D (batch, seq_len), so no need for [:, :-lag, 0]
+plt.plot(np.arange(8) + 1, accuracy_by_time(ry[:, lag:], pybert[:, :-lag]), "m", label="BERT")
 plt.legend(loc="best")
 plt.title("IPD Task - Action Prediction Accuracy")
 plt.xlabel("Prediction Time Steps")
@@ -463,7 +467,8 @@ plt.savefig(
 lstm_acc = np.mean(accuracy_by_time(ry[:, lag:], py[:, :-lag, 0]))
 ar_acc = np.mean(accuracy_by_time(ry[:, lag:], pyar[:, :-lag]))
 lr_acc = np.mean(accuracy_by_time(ry[:, lag:], pylr))
-bert_acc = np.mean(accuracy_by_time(ry[:, lag:], pybert[:, :-lag, 0]))
+# pybert is 2D (batch, seq_len), so no need for [:, :-lag, 0]
+bert_acc = np.mean(accuracy_by_time(ry[:, lag:], pybert[:, :-lag]))
 print("IPD Accuracy - LSTM:", lstm_acc, "AR:", ar_acc, "LR:", lr_acc, "BERT:", bert_acc)
 
 plt.clf()
