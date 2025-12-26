@@ -263,7 +263,7 @@ Key Differences:
 
 idea
 
--- use Shap to weight different features
+-- use Shap to weight different features -- can't make it
 -- maybe we need put history decision outside and put it as a special 
 -- we can't simply calculate RTG using previous reward cuz previous reward represent the outcome that we choose
 -- we want model to learn policy which not just game policy but also some psychology policy so that we can help model to understand why people choose this
@@ -284,7 +284,7 @@ done! -- divide trajectories by period
 
 -- recreate lstm and all model in your paper
 -- find another good dataset
--- 
+-- change accuracy to Accuracy was measured by mean squared error (MSE), supplemented by a “completeness” metric which is defined as the fraction of predictable variation in the data that the model captures.14 It is calculated as (MSErandom – MSEmodel)/(MSErandom – MSEirreducible), where MSErandom is the test MSE of a model that assumes random behavior, MSEmodel is the test MSE of the model, and MSEirreducible is the estimated test MSE of a theoretical perfect model, whose error is only a result of the sampling variation (see methods).
 
 question:
 
