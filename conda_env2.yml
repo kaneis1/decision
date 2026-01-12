@@ -22,3 +22,4 @@ dependencies:
       - tqdm
       - packaging
       - typing_extensions
+      - shap  # For model explainability (optional - install via conda-forge if pip fails)

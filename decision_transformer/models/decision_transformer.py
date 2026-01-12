@@ -96,7 +96,7 @@ class DecisionTransformer(TrajectoryModel):
         # get predictions
         return_preds = self.predict_return(x[:,1])  # predict next return given state and action
         state_preds = self.predict_state(x[:,0])    # predict next state given state and action
-        action_preds = self.predict_action(x[:,2])  # predict next action given state
+        action_preds = self.predict_action(x[:,1])  # predict next action given state
 
         return state_preds, action_preds, return_preds
 

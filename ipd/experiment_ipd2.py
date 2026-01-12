@@ -7,6 +7,9 @@
 import argparse
 import os
 import random
+import sys
+# Add parent directory to path to allow imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
 import pandas as pd
@@ -589,7 +592,11 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--csv_path", type=str, default="decision/data/all_data.csv")
+    default_csv_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "data", "all_data.csv"
+    )
+    parser.add_argument("--csv_path", type=str, default=default_csv_path)
     parser.add_argument("--K", type=int, default=40)
     parser.add_argument("--batch_size", type=int, default=128)
     parser.add_argument("--embed_dim", type=int, default=256)
