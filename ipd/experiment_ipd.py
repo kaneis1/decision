@@ -533,6 +533,54 @@ def main(args):
                 # Log test metrics with "test/" prefix
                 wandb.log({f"test/ipd/{k}": v for k, v in test_metrics.items()})
                 wandb.finish()
+    
+    # Save pre-trained model for SHAP analysis
+    if len(trained_models) > 0:
+        # Use the model from the last fold (or you can use the best model)
+        final_model = trained_models[-1]
+        
+        # Calculate normalization stats from all training data (CV data)
+        all_cv_states = np.concatenate([trajectories[int(i)]["observations"] for i in cv_inds], axis=0)
+        final_state_mean = all_cv_states.mean(axis=0)
+        final_state_std = all_cv_states.std(axis=0) + 1e-6
+        
+        # Create save directory if it doesn't exist
+        model_save_dir = args.model_save_dir
+        if model_save_dir is None:
+            model_save_dir = os.path.join(os.path.dirname(__file__), "..", "models", "ipd_dt_model")
+        os.makedirs(model_save_dir, exist_ok=True)
+        
+        # Save model checkpoint
+        model_save_path = os.path.join(model_save_dir, args.model_name)
+        # Get state_dim from first trajectory
+        state_dim_from_traj = trajectories[0]["observations"].shape[1]
+        
+        checkpoint = {
+            'model_state_dict': final_model.state_dict(),
+            'state_dim': state_dim_from_traj,
+            'act_dim': 1,
+            'max_length': args.K,
+            'max_ep_len': max_ep_len,
+            'hidden_size': args.embed_dim,
+            'n_layer': args.n_layer,
+            'n_head': args.n_head,
+            'activation_function': args.activation_function,
+            'state_mean': final_state_mean,
+            'state_std': final_state_std,
+            'history_k': args.history_k,
+            'config': vars(args),
+        }
+        torch.save(checkpoint, model_save_path)
+        
+        print("\n" + "=" * 70)
+        print("Pre-trained Model Saved")
+        print("=" * 70)
+        print(f"Model saved to: {model_save_path}")
+        print(f"State dimension: {state_dim_from_traj}")
+        print(f"History k: {args.history_k}")
+        print(f"Max episode length: {max_ep_len}")
+        print(f"K (max_length): {args.K}")
+        print("=" * 70)
 
 
 
@@ -564,5 +612,7 @@ if __name__ == "__main__":
     parser.add_argument("--fold_index", type=int, default=0)
     parser.add_argument("--fold_seed", type=int, default=0)
     parser.add_argument("--run_all_folds", action="store_true", default=True)
+    parser.add_argument("--model_save_dir", type=str, default=None, help="Directory to save the pre-trained model (default: ../models/ipd_dt_model)")
+    parser.add_argument("--model_name", type=str, default="ipd_decision_transformer.pt", help="Name for the saved model file")
     args = parser.parse_args()
     main(args)
